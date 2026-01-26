@@ -9,18 +9,17 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --primary: hsl(0, 78%, 52%);
-            --primary-dark: hsl(0, 78%, 38%);
-            --primary-light: hsla(0, 78%, 52%, 0.12);
-            --bg: hsl(0, 0%, 98%);
-            --card-bg: hsla(0, 0%, 100%, 0.68);
-            --text: hsl(220, 20%, 12%);
-            --text-light: hsl(220, 15%, 45%);
-            --border: hsla(0, 0%, 80%, 0.4);
-            --shadow: 0 8px 32px rgba(31, 38, 135, 0.15);
-            --blur: blur(16px);
-            --radius: 20px;
-            --transition: 0.28s cubic-bezier(0.4, 0, 0.2, 1);
+            --primary: #ff4d4d;
+            --primary-dark: #e63939;
+            --primary-glow: rgba(255, 77, 77, 0.4);
+            --bg: #f8f9fa;
+            --card-bg: rgba(255, 255, 255, 0.75);
+            --text: #1a1a1a;
+            --text-light: #6b7280;
+            --border: rgba(255, 77, 77, 0.25);
+            --shadow: 0 12px 40px rgba(255, 77, 77, 0.18);
+            --radius: 22px;
+            --transition: 0.32s cubic-bezier(0.34, 1.56, 0.64, 1);
         }
 
         * {
@@ -31,59 +30,74 @@
 
         body {
             font-family: 'Inter', system-ui, sans-serif;
-            background: linear-gradient(135deg, #ff6b6b 0%, #ff8e53 100%);
+            background: linear-gradient(135deg, #ff4d4d 0%, #ff8c66 100%);
             min-height: 100vh;
             color: var(--text);
             display: grid;
             place-items: center;
-            padding: 2rem 1rem;
+            padding: 1.5rem;
         }
 
         .card {
             background: var(--card-bg);
-            backdrop-filter: var(--blur);
-            -webkit-backdrop-filter: var(--blur);
+            backdrop-filter: blur(18px);
+            -webkit-backdrop-filter: blur(18px);
             border: 1px solid var(--border);
             border-radius: var(--radius);
             box-shadow: var(--shadow);
             width: 100%;
-            max-width: 540px;
+            max-width: 560px;
             overflow: hidden;
-            animation: appear 0.8s ease-out;
+            animation: appear 0.9s ease-out;
         }
 
         @keyframes appear {
-            from { opacity: 0; transform: translateY(30px) scale(0.96); }
+            from { opacity: 0; transform: translateY(40px) scale(0.94); }
             to   { opacity: 1; transform: translateY(0) scale(1); }
         }
 
         .header {
             background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
             color: white;
-            padding: 2.2rem 2rem 1.8rem;
+            padding: 2.4rem 2rem 1.8rem;
             text-align: center;
             position: relative;
+            overflow: hidden;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: -50%; left: -50%;
+            width: 200%; height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.18) 0%, transparent 60%);
+            animation: shine 12s linear infinite;
+        }
+
+        @keyframes shine {
+            0% { transform: translateX(-100%) rotate(0deg); }
+            100% { transform: translateX(100%) rotate(360deg); }
         }
 
         .header h1 {
-            font-size: 1.9rem;
+            font-size: 2.1rem;
             font-weight: 700;
-            margin-bottom: 0.4rem;
+            margin-bottom: 0.5rem;
+            letter-spacing: -0.5px;
         }
 
         .header p {
-            font-size: 0.96rem;
-            opacity: 0.9;
+            font-size: 1rem;
+            opacity: 0.92;
             font-weight: 400;
         }
 
         .form {
-            padding: 2rem;
+            padding: 2.2rem 2rem;
             display: grid;
-            gap: 1.6rem;
+            gap: 1.8rem;
         }
 
-        /* ─── Floating Label Input ─── */
         .float-group {
             position: relative;
         }
@@ -92,13 +106,14 @@
         .float-group select,
         .float-group textarea {
             width: 100%;
-            padding: 1.1rem 1rem 0.4rem;
-            font-size: 1rem;
-            background: rgba(255,255,255,0.45);
-            border: 1px solid var(--border);
-            border-radius: 12px;
-            transition: var(--transition);
+            padding: 1.25rem 1.1rem 0.5rem;
+            font-size: 1.05rem;
+            background: rgba(255,255,255,0.55);
+            border: 1.5px solid var(--border);
+            border-radius: 16px;
+            transition: all var(--transition);
             color: var(--text);
+            font-weight: 500;
         }
 
         .float-group input:focus,
@@ -106,18 +121,19 @@
         .float-group textarea:focus {
             outline: none;
             border-color: var(--primary);
-            box-shadow: 0 0 0 4px var(--primary-light);
+            box-shadow: 0 0 0 5px var(--primary-glow);
             background: white;
+            transform: translateY(-1px);
         }
 
         .float-group label {
             position: absolute;
-            top: 1.05rem;
-            left: 1rem;
-            font-size: 1rem;
+            top: 1.15rem;
+            left: 1.2rem;
+            font-size: 1.05rem;
             color: var(--text-light);
             pointer-events: none;
-            transition: var(--transition);
+            transition: all var(--transition);
             transform-origin: left;
         }
 
@@ -127,103 +143,101 @@
         .float-group select:not([value=""]) + label,
         .float-group textarea:focus + label,
         .float-group textarea:not(:placeholder-shown) + label {
-            top: 0.35rem;
-            font-size: 0.78rem;
+            top: 0.45rem;
+            font-size: 0.82rem;
             font-weight: 600;
             color: var(--primary);
             transform: translateY(-50%);
         }
 
-        /* Special fields */
+        /* Amount special */
         .amount-wrapper {
             position: relative;
         }
 
-        .amount-wrapper .currency {
+        .amount-wrapper .rupee {
             position: absolute;
-            left: 1rem;
+            left: 1.1rem;
             top: 50%;
-            transform: translateY(-22%);
-            color: var(--text-light);
-            font-weight: 600;
+            transform: translateY(-50%);
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: var(--primary);
             pointer-events: none;
         }
 
         .amount-wrapper input {
-            padding-left: 2.4rem !important;
+            padding-left: 3.2rem !important;
         }
 
-        /* Row layout */
+        /* Row */
         .row {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 1.4rem;
+            gap: 1.6rem;
         }
 
-        @media (max-width: 500px) {
+        @media (max-width: 520px) {
             .row { grid-template-columns: 1fr; }
         }
 
         /* Button */
-        .btn-submit {
+        .btn {
             background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
             color: white;
             border: none;
-            padding: 1.1rem;
-            font-size: 1.05rem;
-            font-weight: 600;
-            border-radius: 14px;
+            padding: 1.25rem;
+            font-size: 1.1rem;
+            font-weight: 700;
+            border-radius: 16px;
             cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 0.6rem;
-            transition: var(--transition);
-            box-shadow: 0 6px 20px rgba(255, 107, 107, 0.35);
+            gap: 0.8rem;
+            transition: all var(--transition);
+            box-shadow: 0 8px 30px rgba(255, 77, 77, 0.4);
             position: relative;
             overflow: hidden;
         }
 
-        .btn-submit:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 12px 32px rgba(255, 107, 107, 0.45);
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 16px 40px rgba(255, 77, 77, 0.55);
         }
 
-        .btn-submit:active {
-            transform: translateY(0);
-        }
-
-        .btn-submit::before {
+        .btn::before {
             content: '';
             position: absolute;
             top: 50%; left: 50%;
             width: 0; height: 0;
-            background: rgba(255,255,255,0.25);
+            background: rgba(255,255,255,0.3);
             border-radius: 50%;
             transform: translate(-50%, -50%);
-            transition: width 0.7s, height 0.7s;
+            transition: width 0.8s, height 0.8s;
         }
 
-        .btn-submit:hover::before {
-            width: 400px; height: 400px;
+        .btn:hover::before {
+            width: 500px; height: 500px;
         }
 
         .whatsapp-icon {
-            width: 22px;
-            height: 22px;
+            width: 26px;
+            height: 26px;
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
         }
 
-        /* Success overlay */
+        /* Success */
         #success {
             position: fixed;
             inset: 0;
-            background: rgba(0,0,0,0.6);
+            background: rgba(0,0,0,0.65);
             display: grid;
             place-items: center;
             opacity: 0;
             pointer-events: none;
-            transition: opacity 0.4s;
-            z-index: 100;
+            transition: opacity 0.5s;
+            z-index: 999;
         }
 
         #success.show {
@@ -233,23 +247,30 @@
 
         .success-box {
             background: white;
-            padding: 2.5rem 2rem;
+            padding: 2.8rem 2.2rem;
             border-radius: var(--radius);
             text-align: center;
             box-shadow: var(--shadow);
-            transform: scale(0.7);
-            transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+            transform: scale(0.6);
+            transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
         }
 
         #success.show .success-box {
             transform: scale(1);
         }
 
-        .check {
-            width: 70px;
-            height: 70px;
-            color: #4ade80;
-            margin-bottom: 1rem;
+        .check-icon {
+            width: 80px;
+            height: 80px;
+            color: #22c55e;
+            margin-bottom: 1.2rem;
+            animation: pop 0.6s ease-out;
+        }
+
+        @keyframes pop {
+            0% { transform: scale(0); }
+            60% { transform: scale(1.2); }
+            100% { transform: scale(1); }
         }
     </style>
 </head>
@@ -258,7 +279,7 @@
 <div class="card">
     <div class="header">
         <h1>Daily Payment Request</h1>
-        <p>Jo details pata hain wahi bhariye — baaki chhod sakte hain</p>
+        <p>Jo jaante ho wahi bharo – baaki chhod do!</p>
     </div>
 
     <form id="paymentForm" class="form">
@@ -284,7 +305,7 @@
         </div>
 
         <div class="float-group amount-wrapper">
-            <span class="currency">₹</span>
+            <span class="rupee">₹</span>
             <input type="number" id="amount" step="0.01" min="0" placeholder=" " required>
             <label for="amount">Amount</label>
         </div>
@@ -301,7 +322,7 @@
         </div>
 
         <div class="float-group">
-            <input type="text" id="vehicleNo" placeholder="e.g. MH12AB1234" maxlength="12">
+            <input type="text" id="vehicleNo" placeholder=" " maxlength="12">
             <label for="vehicleNo">Vehicle No</label>
         </div>
 
@@ -321,7 +342,7 @@
             <label for="spRemarks">SP Remarks</label>
         </div>
 
-        <button type="submit" class="btn-submit">
+        <button type="submit" class="btn">
             <svg class="whatsapp-icon" viewBox="0 0 24 24" fill="currentColor">
                 <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
             </svg>
@@ -332,23 +353,23 @@
 
 <div id="success">
     <div class="success-box">
-        <svg class="check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+        <svg class="check-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5">
             <polyline points="20 6 9 17 4 12"></polyline>
         </svg>
-        <h2>Submitted!</h2>
-        <p>Opening WhatsApp...</p>
+        <h2>Success!</h2>
+        <p>WhatsApp khul raha hai...</p>
     </div>
 </div>
 
 <script>
     const form = document.getElementById('paymentForm');
     const success = document.getElementById('success');
-    const WHATSAPP_NUMBER = "916206494170"; // ← change here
+    const WHATSAPP_NUMBER = "916206494170";
 
     // Today's date default
     document.getElementById('date').value = new Date().toISOString().split('T')[0];
 
-    // Vehicle number uppercase
+    // Vehicle number → always UPPERCASE + no spaces
     document.getElementById('vehicleNo').addEventListener('input', e => {
         e.target.value = e.target.value.toUpperCase().replace(/\s+/g, '');
     });
@@ -370,19 +391,19 @@
 
         let msg = `💰 *Daily Payment Request*\n\n`;
         if (data.date)    msg += `📅 *Date:* ${new Date(data.date).toLocaleDateString('en-IN', {day:'2-digit', month:'short', year:'numeric'})}\n`;
-        if (data.ledger)  msg += `📋 *Ledger:* ${data.ledger}\n`;
-        if (data.amount)  msg += `💵 *Amount:* ₹${Number(data.amount).toLocaleString('en-IN')}\n`;
+        if (data.ledger)  msg += `📋 *Ledger Name:* ${data.ledger}\n`;
+        if (data.amount)  msg += `💰 *Amount:* ₹${Number(data.amount).toLocaleString('en-IN', {minimumFractionDigits:2, maximumFractionDigits:2})}\n`;
         msg += `💳 *Tr. Type:* \n🔢 *UTR No:* \n`;
         if (data.lrBranch) msg += `🏢 *LR Branch:* ${data.lrBranch}\n`;
         if (data.lrNo)     msg += `📄 *LR No:* ${data.lrNo}\n`;
-        if (data.vehicleNo) msg += `🚛 *Vehicle:* ${data.vehicleNo}\n`;
-        if (data.challanNo) msg += `📋 *Challan:* ${data.challanNo}\n`;
-        if (data.drsNo)     msg += `📑 *DRS:* ${data.drsNo}\n`;
-        if (data.spRemarks) msg += `\n📝 *Remarks:* ${data.spRemarks}\n`;
+        if (data.vehicleNo) msg += `🚗 *Vehicle No:* ${data.vehicleNo}\n`;
+        if (data.challanNo) msg += `📋 *Challan No:* ${data.challanNo}\n`;
+        if (data.drsNo)     msg += `📑 *DRS No:* ${data.drsNo}\n`;
+        if (data.spRemarks) msg += `\n📝 *SP Remarks:* ${data.spRemarks}\n`;
 
         const url = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(msg)}`;
 
-        // Show success
+        // Show success popup
         success.classList.add('show');
 
         setTimeout(() => {
@@ -391,8 +412,8 @@
                 success.classList.remove('show');
                 form.reset();
                 document.getElementById('date').value = new Date().toISOString().split('T')[0];
-            }, 800);
-        }, 1400);
+            }, 1000);
+        }, 1600);
     });
 </script>
 </body>
