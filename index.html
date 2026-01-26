@@ -131,6 +131,53 @@
             color: var(--primary);
         }
 
+        /* Multiple entries styling */
+        .multi-entry {
+            position: relative;
+            margin-bottom: 0.8rem;
+        }
+
+        .multi-entry input {
+            padding-right: 2.8rem;
+        }
+
+        .remove-btn {
+            position: absolute;
+            right: 0.8rem;
+            top: 50%;
+            transform: translateY(-50%);
+            background: #ef4444;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 22px;
+            height: 22px;
+            font-size: 1.1rem;
+            line-height: 1;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .add-more {
+            background: rgba(255, 77, 77, 0.15);
+            color: var(--primary);
+            border: 1px dashed var(--primary);
+            border-radius: 12px;
+            padding: 0.6rem 1rem;
+            font-size: 0.95rem;
+            cursor: pointer;
+            margin-top: 0.5rem;
+            width: 100%;
+            text-align: center;
+            transition: all 0.2s;
+        }
+
+        .add-more:hover {
+            background: rgba(255, 77, 77, 0.25);
+        }
+
         .amount-wrapper { position: relative; }
         .amount-wrapper .rupee {
             position: absolute;
@@ -268,32 +315,57 @@
             <label for="amount">Amount</label>
         </div>
 
-        <div class="row">
-            <div class="float-group">
-                <input type="text" id="lrBranch" placeholder=" " maxlength="50">
-                <label for="lrBranch">LR Branch</label>
+        <!-- LR Branch - Multiple -->
+        <div class="float-group" id="lrBranchSection">
+            <label>LR Branch</label>
+            <div id="lrBranchEntries">
+                <div class="multi-entry">
+                    <input type="text" class="lr-branch-input" placeholder=" " maxlength="50">
+                </div>
             </div>
-
-            <div class="float-group">
-                <input type="tel" inputmode="numeric" pattern="[0-9]*" id="lrNo" placeholder=" " maxlength="20">
-                <label for="lrNo">LR No</label>
-            </div>
-        </div>
-
-        <div class="float-group">
-            <input type="text" id="vehicleNo" placeholder=" " maxlength="12">
-            <label for="vehicleNo">Vehicle No</label>
+            <button type="button" class="add-more" onclick="addEntry('lrBranch')">+ Add More Branch</button>
         </div>
 
         <div class="row">
+            <!-- LR No - Multiple -->
             <div class="float-group">
-                <input type="tel" inputmode="numeric" pattern="[0-9]*" id="challanNo" placeholder=" " maxlength="20">
-                <label for="challanNo">Challan No</label>
+                <label>LR No</label>
+                <div id="lrNoEntries">
+                    <div class="multi-entry">
+                        <input type="tel" inputmode="numeric" pattern="[0-9]*" class="lr-no-input" placeholder=" " maxlength="20">
+                    </div>
+                </div>
+                <button type="button" class="add-more" onclick="addEntry('lrNo')">+ Add More LR No</button>
             </div>
 
+            <!-- Vehicle No (single) -->
             <div class="float-group">
-                <input type="tel" inputmode="numeric" pattern="[0-9]*" id="drsNo" placeholder=" " maxlength="20">
-                <label for="drsNo">DRS No</label>
+                <input type="text" id="vehicleNo" placeholder=" " maxlength="12">
+                <label for="vehicleNo">Vehicle No</label>
+            </div>
+        </div>
+
+        <div class="row">
+            <!-- Challan No - Multiple -->
+            <div class="float-group">
+                <label>Challan No</label>
+                <div id="challanNoEntries">
+                    <div class="multi-entry">
+                        <input type="tel" inputmode="numeric" pattern="[0-9]*" class="challan-no-input" placeholder=" " maxlength="20">
+                    </div>
+                </div>
+                <button type="button" class="add-more" onclick="addEntry('challanNo')">+ Add More Challan</button>
+            </div>
+
+            <!-- DRS No - Multiple -->
+            <div class="float-group">
+                <label>DRS No</label>
+                <div id="drsNoEntries">
+                    <div class="multi-entry">
+                        <input type="tel" inputmode="numeric" pattern="[0-9]*" class="drs-no-input" placeholder=" " maxlength="20">
+                    </div>
+                </div>
+                <button type="button" class="add-more" onclick="addEntry('drsNo')">+ Add More DRS</button>
             </div>
         </div>
 
@@ -322,45 +394,115 @@
 </div>
 
 <script>
-    const form = document.getElementById('paymentForm');
-    const success = document.getElementById('success');
     const WHATSAPP_NUMBER = "917977781821";
 
-    // Today's date default
+    // Today's date
     document.getElementById('date').value = new Date().toISOString().split('T')[0];
 
-    // Vehicle number → UPPERCASE + no spaces
+    // Vehicle No uppercase + no space
     document.getElementById('vehicleNo').addEventListener('input', e => {
         e.target.value = e.target.value.toUpperCase().replace(/\s+/g, '');
     });
 
-    // LR Branch → only UPPERCASE letters + spaces (auto convert + filter)
-    document.getElementById('lrBranch').addEventListener('input', function() {
-        this.value = this.value
-            .toUpperCase()
-            .replace(/[^A-Z\s]/g, '');   // only A-Z and space allowed
+    // LR Branch uppercase + only letters & space
+    document.querySelectorAll('.lr-branch-input').forEach(el => {
+        el.addEventListener('input', function() {
+            this.value = this.value.toUpperCase().replace(/[^A-Z\s]/g, '');
+        });
     });
 
-    // Numeric fields → only digits (already filtered by inputmode + pattern, extra safety)
-    ['amount', 'lrNo', 'challanNo', 'drsNo'].forEach(id => {
-        const el = document.getElementById(id);
+    // Numeric fields only digits
+    ['amount', ...document.querySelectorAll('.lr-no-input, .challan-no-input, .drs-no-input')].forEach(el => {
+        if (typeof el === 'string') el = document.getElementById(el);
         el.addEventListener('input', function() {
             this.value = this.value.replace(/[^0-9]/g, '');
         });
     });
 
-    form.addEventListener('submit', e => {
+    // Add more entry function
+    function addEntry(type) {
+        const container = document.getElementById(type + 'Entries');
+        const newEntry = document.createElement('div');
+        newEntry.className = 'multi-entry';
+
+        let inputClass = '';
+        let inputType = 'text';
+        let inputMode = '';
+        let pattern = '';
+
+        if (type === 'lrBranch') {
+            inputClass = 'lr-branch-input';
+            inputType = 'text';
+        } else if (type === 'lrNo') {
+            inputClass = 'lr-no-input';
+            inputType = 'tel';
+            inputMode = 'numeric';
+            pattern = '[0-9]*';
+        } else if (type === 'challanNo') {
+            inputClass = 'challan-no-input';
+            inputType = 'tel';
+            inputMode = 'numeric';
+            pattern = '[0-9]*';
+        } else if (type === 'drsNo') {
+            inputClass = 'drs-no-input';
+            inputType = 'tel';
+            inputMode = 'numeric';
+            pattern = '[0-9]*';
+        }
+
+        const input = document.createElement('input');
+        input.type = inputType;
+        input.className = inputClass;
+        input.placeholder = ' ';
+        input.maxLength = type === 'lrBranch' ? 50 : 20;
+        if (inputMode) input.setAttribute('inputmode', inputMode);
+        if (pattern) input.setAttribute('pattern', pattern);
+
+        const removeBtn = document.createElement('button');
+        removeBtn.type = 'button';
+        removeBtn.className = 'remove-btn';
+        removeBtn.textContent = '×';
+        removeBtn.onclick = () => newEntry.remove();
+
+        newEntry.appendChild(input);
+        newEntry.appendChild(removeBtn);
+        container.appendChild(newEntry);
+
+        // Re-attach filters to new input
+        if (type === 'lrBranch') {
+            input.addEventListener('input', function() {
+                this.value = this.value.toUpperCase().replace(/[^A-Z\s]/g, '');
+            });
+        } else {
+            input.addEventListener('input', function() {
+                this.value = this.value.replace(/[^0-9]/g, '');
+            });
+        }
+    }
+
+    // Form submit
+    document.getElementById('paymentForm').addEventListener('submit', e => {
         e.preventDefault();
+
+        // Collect multiple values
+        const lrBranches = Array.from(document.querySelectorAll('.lr-branch-input'))
+            .map(el => el.value.trim()).filter(v => v);
+        const lrNos = Array.from(document.querySelectorAll('.lr-no-input'))
+            .map(el => el.value.trim()).filter(v => v);
+        const challanNos = Array.from(document.querySelectorAll('.challan-no-input'))
+            .map(el => el.value.trim()).filter(v => v);
+        const drsNos = Array.from(document.querySelectorAll('.drs-no-input'))
+            .map(el => el.value.trim()).filter(v => v);
 
         const data = {
             date: document.getElementById('date').value,
             ledger: document.getElementById('ledger').value,
             amount: document.getElementById('amount').value,
-            lrBranch: document.getElementById('lrBranch').value.trim(),
-            lrNo: document.getElementById('lrNo').value.trim(),
+            lrBranch: lrBranches.join(', '),
+            lrNo: lrNos.join(', '),
             vehicleNo: document.getElementById('vehicleNo').value.trim(),
-            challanNo: document.getElementById('challanNo').value.trim(),
-            drsNo: document.getElementById('drsNo').value.trim(),
+            challanNo: challanNos.join(', '),
+            drsNo: drsNos.join(', '),
             spRemarks: document.getElementById('spRemarks').value.trim()
         };
 
@@ -384,14 +526,13 @@
 
         const url = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(msg)}`;
 
-        success.classList.add('show');
+        document.getElementById('success').classList.add('show');
 
         setTimeout(() => {
             window.open(url, '_blank');
             setTimeout(() => {
-                success.classList.remove('show');
-                form.reset();
-                document.getElementById('date').value = new Date().toISOString().split('T')[0];
+                document.getElementById('success').classList.remove('show');
+                location.reload(); // full reset (simple way)
             }, 1000);
         }, 1600);
     });
