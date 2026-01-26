@@ -8,6 +8,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
+        /* ── Same modern glassmorphism style as before ── no changes needed here */
         :root {
             --primary: #ff4d4d;
             --primary-dark: #e63939;
@@ -22,11 +23,7 @@
             --transition: 0.32s cubic-bezier(0.34, 1.56, 0.64, 1);
         }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        * { margin:0; padding:0; box-sizing:border-box; }
 
         body {
             font-family: 'Inter', system-ui, sans-serif;
@@ -150,7 +147,6 @@
             transform: translateY(-50%);
         }
 
-        /* Amount special */
         .amount-wrapper {
             position: relative;
         }
@@ -170,7 +166,6 @@
             padding-left: 3.2rem !important;
         }
 
-        /* Row */
         .row {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -181,7 +176,6 @@
             .row { grid-template-columns: 1fr; }
         }
 
-        /* Button */
         .btn {
             background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
             color: white;
@@ -227,7 +221,6 @@
             filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
         }
 
-        /* Success */
         #success {
             position: fixed;
             inset: 0;
@@ -364,7 +357,9 @@
 <script>
     const form = document.getElementById('paymentForm');
     const success = document.getElementById('success');
-    const WHATSAPP_NUMBER = "916206494170";
+
+    // ── NEW NUMBER ADDED HERE ──
+    const WHATSAPP_NUMBER = "917977781821";  // +917977781821
 
     // Today's date default
     document.getElementById('date').value = new Date().toISOString().split('T')[0];
@@ -389,8 +384,15 @@
             spRemarks: document.getElementById('spRemarks').value.trim()
         };
 
+        // Date format: 01-11-2025
+        let formattedDate = '';
+        if (data.date) {
+            const [yyyy, mm, dd] = data.date.split('-');
+            formattedDate = `${dd}-${mm}-${yyyy}`;
+        }
+
         let msg = `💰 *Daily Payment Request*\n\n`;
-        if (data.date)    msg += `📅 *Date:* ${new Date(data.date).toLocaleDateString('en-IN', {day:'2-digit', month:'short', year:'numeric'})}\n`;
+        if (data.date)    msg += `📅 *Date:* ${formattedDate}\n`;
         if (data.ledger)  msg += `📋 *Ledger Name:* ${data.ledger}\n`;
         if (data.amount)  msg += `💰 *Amount:* ₹${Number(data.amount).toLocaleString('en-IN', {minimumFractionDigits:2, maximumFractionDigits:2})}\n`;
         msg += `💳 *Tr. Type:* \n🔢 *UTR No:* \n`;
@@ -403,7 +405,6 @@
 
         const url = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(msg)}`;
 
-        // Show success popup
         success.classList.add('show');
 
         setTimeout(() => {
