@@ -8,15 +8,11 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        /* ── Same modern glassmorphism style as before ── no changes needed here */
         :root {
             --primary: #ff4d4d;
             --primary-dark: #e63939;
             --primary-glow: rgba(255, 77, 77, 0.4);
-            --bg: #f8f9fa;
             --card-bg: rgba(255, 255, 255, 0.75);
-            --text: #1a1a1a;
-            --text-light: #6b7280;
             --border: rgba(255, 77, 77, 0.25);
             --shadow: 0 12px 40px rgba(255, 77, 77, 0.18);
             --radius: 22px;
@@ -29,7 +25,7 @@
             font-family: 'Inter', system-ui, sans-serif;
             background: linear-gradient(135deg, #ff4d4d 0%, #ff8c66 100%);
             min-height: 100vh;
-            color: var(--text);
+            color: #1a1a1a;
             display: grid;
             place-items: center;
             padding: 1.5rem;
@@ -76,18 +72,8 @@
             100% { transform: translateX(100%) rotate(360deg); }
         }
 
-        .header h1 {
-            font-size: 2.1rem;
-            font-weight: 700;
-            margin-bottom: 0.5rem;
-            letter-spacing: -0.5px;
-        }
-
-        .header p {
-            font-size: 1rem;
-            opacity: 0.92;
-            font-weight: 400;
-        }
+        .header h1 { font-size: 2.1rem; font-weight: 700; margin-bottom: 0.5rem; letter-spacing: -0.5px; }
+        .header p   { font-size: 1rem; opacity: 0.92; }
 
         .form {
             padding: 2.2rem 2rem;
@@ -109,7 +95,7 @@
             border: 1.5px solid var(--border);
             border-radius: 16px;
             transition: all var(--transition);
-            color: var(--text);
+            color: #1a1a1a;
             font-weight: 500;
         }
 
@@ -128,10 +114,9 @@
             top: 1.15rem;
             left: 1.2rem;
             font-size: 1.05rem;
-            color: var(--text-light);
+            color: #6b7280;
             pointer-events: none;
             transition: all var(--transition);
-            transform-origin: left;
         }
 
         .float-group input:focus + label,
@@ -144,13 +129,9 @@
             font-size: 0.82rem;
             font-weight: 600;
             color: var(--primary);
-            transform: translateY(-50%);
         }
 
-        .amount-wrapper {
-            position: relative;
-        }
-
+        .amount-wrapper { position: relative; }
         .amount-wrapper .rupee {
             position: absolute;
             left: 1.1rem;
@@ -161,10 +142,7 @@
             color: var(--primary);
             pointer-events: none;
         }
-
-        .amount-wrapper input {
-            padding-left: 3.2rem !important;
-        }
+        .amount-wrapper input { padding-left: 3.2rem !important; }
 
         .row {
             display: grid;
@@ -172,9 +150,7 @@
             gap: 1.6rem;
         }
 
-        @media (max-width: 520px) {
-            .row { grid-template-columns: 1fr; }
-        }
+        @media (max-width: 520px) { .row { grid-template-columns: 1fr; } }
 
         .btn {
             background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
@@ -211,15 +187,9 @@
             transition: width 0.8s, height 0.8s;
         }
 
-        .btn:hover::before {
-            width: 500px; height: 500px;
-        }
+        .btn:hover::before { width: 500px; height: 500px; }
 
-        .whatsapp-icon {
-            width: 26px;
-            height: 26px;
-            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
-        }
+        .whatsapp-icon { width: 26px; height: 26px; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3)); }
 
         #success {
             position: fixed;
@@ -233,10 +203,7 @@
             z-index: 999;
         }
 
-        #success.show {
-            opacity: 1;
-            pointer-events: all;
-        }
+        #success.show { opacity: 1; pointer-events: all; }
 
         .success-box {
             background: white;
@@ -248,9 +215,7 @@
             transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
         }
 
-        #success.show .success-box {
-            transform: scale(1);
-        }
+        #success.show .success-box { transform: scale(1); }
 
         .check-icon {
             width: 80px;
@@ -305,11 +270,12 @@
 
         <div class="row">
             <div class="float-group">
-                <input type="text" id="lrBranch" placeholder=" ">
+                <input type="text" id="lrBranch" placeholder=" " maxlength="50">
                 <label for="lrBranch">LR Branch</label>
             </div>
+
             <div class="float-group">
-                <input type="text" id="lrNo" placeholder=" ">
+                <input type="text" id="lrNo" placeholder=" " maxlength="20">
                 <label for="lrNo">LR No</label>
             </div>
         </div>
@@ -321,11 +287,12 @@
 
         <div class="row">
             <div class="float-group">
-                <input type="text" id="challanNo" placeholder=" ">
+                <input type="text" id="challanNo" placeholder=" " maxlength="20">
                 <label for="challanNo">Challan No</label>
             </div>
+
             <div class="float-group">
-                <input type="text" id="drsNo" placeholder=" ">
+                <input type="text" id="drsNo" placeholder=" " maxlength="20">
                 <label for="drsNo">DRS No</label>
             </div>
         </div>
@@ -357,16 +324,38 @@
 <script>
     const form = document.getElementById('paymentForm');
     const success = document.getElementById('success');
-
-    // ── NEW NUMBER ADDED HERE ──
-    const WHATSAPP_NUMBER = "917977781821";  // +917977781821
+    const WHATSAPP_NUMBER = "917977781821";
 
     // Today's date default
     document.getElementById('date').value = new Date().toISOString().split('T')[0];
 
-    // Vehicle number → always UPPERCASE + no spaces
+    // Vehicle number → UPPERCASE + no spaces
     document.getElementById('vehicleNo').addEventListener('input', e => {
         e.target.value = e.target.value.toUpperCase().replace(/\s+/g, '');
+    });
+
+    // Strict input filtering – only allowed characters rakhega
+    const filters = {
+        lrBranch:  document.getElementById('lrBranch'),   // only letters + space
+        lrNo:      document.getElementById('lrNo'),       // only digits
+        challanNo: document.getElementById('challanNo'),  // only digits
+        drsNo:     document.getElementById('drsNo')       // only digits
+    };
+
+    filters.lrBranch.addEventListener('input', function() {
+        this.value = this.value.replace(/[^A-Za-z\s]/g, '');
+    });
+
+    filters.lrNo.addEventListener('input', function() {
+        this.value = this.value.replace(/[^0-9]/g, '');
+    });
+
+    filters.challanNo.addEventListener('input', function() {
+        this.value = this.value.replace(/[^0-9]/g, '');
+    });
+
+    filters.drsNo.addEventListener('input', function() {
+        this.value = this.value.replace(/[^0-9]/g, '');
     });
 
     form.addEventListener('submit', e => {
@@ -376,15 +365,14 @@
             date: document.getElementById('date').value,
             ledger: document.getElementById('ledger').value,
             amount: document.getElementById('amount').value,
-            lrBranch: document.getElementById('lrBranch').value.trim(),
-            lrNo: document.getElementById('lrNo').value.trim(),
+            lrBranch: filters.lrBranch.value.trim(),
+            lrNo: filters.lrNo.value.trim(),
             vehicleNo: document.getElementById('vehicleNo').value.trim(),
-            challanNo: document.getElementById('challanNo').value.trim(),
-            drsNo: document.getElementById('drsNo').value.trim(),
+            challanNo: filters.challanNo.value.trim(),
+            drsNo: filters.drsNo.value.trim(),
             spRemarks: document.getElementById('spRemarks').value.trim()
         };
 
-        // Date format: 01-11-2025
         let formattedDate = '';
         if (data.date) {
             const [yyyy, mm, dd] = data.date.split('-');
