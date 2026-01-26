@@ -1,876 +1,399 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description"
-        content="Modern daily payment request form with WhatsApp integration for seamless logistics management">
-    <title>Daily Payment Request - Logistics Management</title>
+    <title>Daily Payment Request • RPM Logistics</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        /* CSS START */
+        :root {
+            --primary: hsl(0, 78%, 52%);
+            --primary-dark: hsl(0, 78%, 38%);
+            --primary-light: hsla(0, 78%, 52%, 0.12);
+            --bg: hsl(0, 0%, 98%);
+            --card-bg: hsla(0, 0%, 100%, 0.68);
+            --text: hsl(220, 20%, 12%);
+            --text-light: hsl(220, 15%, 45%);
+            --border: hsla(0, 0%, 80%, 0.4);
+            --shadow: 0 8px 32px rgba(31, 38, 135, 0.15);
+            --blur: blur(16px);
+            --radius: 20px;
+            --transition: 0.28s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
 
-        :root {
-            /* Color Palette - RPM Red Theme */
-            --primary: hsl(0, 75%, 50%);
-            --primary-dark: hsl(0, 75%, 42%);
-            --primary-light: hsl(0, 75%, 96%);
-            --secondary: hsl(220, 13%, 18%);
-            --accent: hsl(0, 80%, 45%);
-
-            /* Gradients */
-            --gradient-bg: linear-gradient(135deg, hsl(0, 75%, 50%) 0%, hsl(10, 80%, 55%) 100%);
-            --gradient-card: linear-gradient(135deg, hsl(0, 0%, 100%) 0%, hsl(0, 0%, 98%) 100%);
-
-            /* Neutral Colors */
-            --text-primary: hsl(220, 13%, 18%);
-            --text-secondary: hsl(220, 9%, 46%);
-            --text-light: hsl(220, 9%, 65%);
-            --border: hsl(220, 13%, 91%);
-            --bg-input: hsl(0, 0%, 98%);
-            --bg-hover: hsl(0, 0%, 96%);
-
-            /* Shadows */
-            --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.04);
-            --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.08);
-            --shadow-lg: 0 12px 40px rgba(0, 0, 0, 0.12);
-            --shadow-xl: 0 20px 60px rgba(0, 0, 0, 0.15);
-
-            /* Spacing */
-            --spacing-xs: 0.5rem;
-            --spacing-sm: 0.75rem;
-            --spacing-md: 1rem;
-            --spacing-lg: 1.5rem;
-            --spacing-xl: 2rem;
-
-            /* Border Radius */
-            --radius-sm: 6px;
-            --radius-md: 10px;
-            --radius-lg: 16px;
-            --radius-xl: 24px;
-
-            /* Transitions */
-            --transition-fast: 150ms ease;
-            --transition-base: 250ms ease;
-            --transition-slow: 350ms ease;
-        }
-
         body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-            background: hsl(220, 13%, 96%);
-            color: var(--text-primary);
-            line-height: 1.6;
+            font-family: 'Inter', system-ui, sans-serif;
+            background: linear-gradient(135deg, #ff6b6b 0%, #ff8e53 100%);
             min-height: 100vh;
-            position: relative;
-            overflow-x: hidden;
-        }
-
-        .background-gradient {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 50vh;
-            background: var(--gradient-bg);
-            z-index: -1;
-            opacity: 0.95;
-        }
-
-        .background-gradient::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background:
-                radial-gradient(circle at 20% 50%, rgba(255, 255, 255, 0.1) 0%, transparent 50%),
-                radial-gradient(circle at 80% 80%, rgba(255, 255, 255, 0.1) 0%, transparent 50%);
-            animation: pulse 8s ease-in-out infinite;
-        }
-
-        @keyframes pulse {
-
-            0%,
-            100% {
-                opacity: 1;
-            }
-
-            50% {
-                opacity: 0.8;
-            }
-        }
-
-        .container {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            padding: var(--spacing-lg);
+            color: var(--text);
+            display: grid;
+            place-items: center;
+            padding: 2rem 1rem;
         }
 
         .card {
-            background: white;
+            background: var(--card-bg);
+            backdrop-filter: var(--blur);
+            -webkit-backdrop-filter: var(--blur);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
             width: 100%;
-            max-width: 520px;
-            border-radius: var(--radius-xl);
-            box-shadow: var(--shadow-xl);
+            max-width: 540px;
             overflow: hidden;
-            animation: slideUp 0.5s ease-out;
-            position: relative;
+            animation: appear 0.8s ease-out;
         }
 
-        @keyframes slideUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+        @keyframes appear {
+            from { opacity: 0; transform: translateY(30px) scale(0.96); }
+            to   { opacity: 1; transform: translateY(0) scale(1); }
         }
 
-        .card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 4px;
-            background: var(--gradient-bg);
-        }
-
-        .card-header {
-            background: var(--gradient-bg);
-            padding: var(--spacing-xl);
-            text-align: center;
+        .header {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
             color: white;
+            padding: 2.2rem 2rem 1.8rem;
+            text-align: center;
             position: relative;
-            overflow: hidden;
         }
 
-        .card-header::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
-            animation: rotate 20s linear infinite;
-        }
-
-        @keyframes rotate {
-            from {
-                transform: rotate(0deg);
-            }
-
-            to {
-                transform: rotate(360deg);
-            }
-        }
-
-        .icon-wrapper {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            width: 64px;
-            height: 64px;
-            background: rgba(255, 255, 255, 0.2);
-            backdrop-filter: blur(10px);
-            border-radius: 50%;
-            margin-bottom: var(--spacing-md);
-            animation: bounce 2s ease-in-out infinite;
-            position: relative;
-            z-index: 1;
-        }
-
-        @keyframes bounce {
-
-            0%,
-            100% {
-                transform: translateY(0);
-            }
-
-            50% {
-                transform: translateY(-8px);
-            }
-        }
-
-        .logo-svg {
-            width: 80px;
-            height: 40px;
-        }
-
-        .card-header h1 {
-            font-size: 1.75rem;
+        .header h1 {
+            font-size: 1.9rem;
             font-weight: 700;
-            margin-bottom: var(--spacing-xs);
-            position: relative;
-            z-index: 1;
+            margin-bottom: 0.4rem;
         }
 
-        .subtitle {
-            font-size: 0.95rem;
-            opacity: 0.95;
+        .header p {
+            font-size: 0.96rem;
+            opacity: 0.9;
             font-weight: 400;
-            position: relative;
-            z-index: 1;
         }
 
         .form {
-            padding: var(--spacing-xl);
-        }
-
-        .form-row {
+            padding: 2rem;
             display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: var(--spacing-md);
-            margin-bottom: var(--spacing-lg);
+            gap: 1.6rem;
         }
 
-        .form-group {
-            margin-bottom: var(--spacing-lg);
-            animation: fadeIn 0.4s ease-out backwards;
-        }
-
-        .form-row .form-group {
-            margin-bottom: 0;
-        }
-
-        .form-group:nth-child(1) {
-            animation-delay: 0.05s;
-        }
-
-        .form-group:nth-child(2) {
-            animation-delay: 0.1s;
-        }
-
-        .form-group:nth-child(3) {
-            animation-delay: 0.15s;
-        }
-
-        .form-group:nth-child(4) {
-            animation-delay: 0.2s;
-        }
-
-        .form-group:nth-child(5) {
-            animation-delay: 0.25s;
-        }
-
-        .form-group:nth-child(6) {
-            animation-delay: 0.3s;
-        }
-
-        .form-group:nth-child(7) {
-            animation-delay: 0.35s;
-        }
-
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(10px);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        label {
-            display: block;
-            margin-bottom: var(--spacing-xs);
-            font-size: 0.875rem;
-            font-weight: 600;
-            color: var(--text-primary);
-        }
-
-        .label-text {
-            color: var(--text-primary);
-        }
-
-        .required {
-            color: hsl(0, 70%, 55%);
-            margin-left: 2px;
-        }
-
-        .input-wrapper {
+        /* ─── Floating Label Input ─── */
+        .float-group {
             position: relative;
-            display: flex;
-            align-items: center;
         }
 
-        input,
-        select,
-        textarea {
+        .float-group input,
+        .float-group select,
+        .float-group textarea {
             width: 100%;
-            padding: 0.875rem 1rem;
-            font-size: 0.95rem;
-            font-family: inherit;
-            color: var(--text-primary);
-            background: var(--bg-input);
-            border: 2px solid transparent;
-            border-radius: var(--radius-md);
-            transition: all var(--transition-base);
-            outline: none;
+            padding: 1.1rem 1rem 0.4rem;
+            font-size: 1rem;
+            background: rgba(255,255,255,0.45);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            transition: var(--transition);
+            color: var(--text);
         }
 
-        input:focus,
-        select:focus,
-        textarea:focus {
-            background: white;
+        .float-group input:focus,
+        .float-group select:focus,
+        .float-group textarea:focus {
+            outline: none;
             border-color: var(--primary);
             box-shadow: 0 0 0 4px var(--primary-light);
-            transform: translateY(-1px);
+            background: white;
         }
 
-        input:hover,
-        select:hover,
-        textarea:hover {
-            background: var(--bg-hover);
-        }
-
-        input::placeholder,
-        textarea::placeholder {
+        .float-group label {
+            position: absolute;
+            top: 1.05rem;
+            left: 1rem;
+            font-size: 1rem;
             color: var(--text-light);
+            pointer-events: none;
+            transition: var(--transition);
+            transform-origin: left;
         }
 
-        .amount-input {
+        .float-group input:focus + label,
+        .float-group input:not(:placeholder-shown) + label,
+        .float-group select:focus + label,
+        .float-group select:not([value=""]) + label,
+        .float-group textarea:focus + label,
+        .float-group textarea:not(:placeholder-shown) + label {
+            top: 0.35rem;
+            font-size: 0.78rem;
+            font-weight: 600;
+            color: var(--primary);
+            transform: translateY(-50%);
+        }
+
+        /* Special fields */
+        .amount-wrapper {
             position: relative;
         }
 
-        .currency-symbol {
+        .amount-wrapper .currency {
             position: absolute;
             left: 1rem;
-            font-size: 1rem;
+            top: 50%;
+            transform: translateY(-22%);
+            color: var(--text-light);
             font-weight: 600;
-            color: var(--text-secondary);
             pointer-events: none;
-            z-index: 1;
         }
 
-        .amount-input input {
-            padding-left: 2.25rem;
+        .amount-wrapper input {
+            padding-left: 2.4rem !important;
         }
 
-        select {
-            cursor: pointer;
-            appearance: none;
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23666' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
-            background-repeat: no-repeat;
-            background-position: right 1rem center;
-            padding-right: 2.5rem;
+        /* Row layout */
+        .row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.4rem;
         }
 
-        textarea {
-            resize: vertical;
-            min-height: 80px;
-            line-height: 1.5;
+        @media (max-width: 500px) {
+            .row { grid-template-columns: 1fr; }
         }
 
-        .submit-btn {
-            width: 100%;
-            padding: 1rem 1.5rem;
-            margin-top: var(--spacing-md);
-            font-size: 1rem;
-            font-weight: 600;
-            font-family: inherit;
+        /* Button */
+        .btn-submit {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
             color: white;
-            background: var(--gradient-bg);
             border: none;
-            border-radius: var(--radius-md);
+            padding: 1.1rem;
+            font-size: 1.05rem;
+            font-weight: 600;
+            border-radius: 14px;
             cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: var(--spacing-sm);
-            transition: all var(--transition-base);
-            box-shadow: var(--shadow-md);
+            gap: 0.6rem;
+            transition: var(--transition);
+            box-shadow: 0 6px 20px rgba(255, 107, 107, 0.35);
             position: relative;
             overflow: hidden;
         }
 
-        .submit-btn::before {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 0;
-            height: 0;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.2);
-            transform: translate(-50%, -50%);
-            transition: width 0.6s, height 0.6s;
-        }
-
-        .submit-btn:hover::before {
-            width: 300px;
-            height: 300px;
-        }
-
-        .submit-btn:hover {
+        .btn-submit:hover {
             transform: translateY(-2px);
-            box-shadow: var(--shadow-lg);
+            box-shadow: 0 12px 32px rgba(255, 107, 107, 0.45);
         }
 
-        .submit-btn:active {
+        .btn-submit:active {
             transform: translateY(0);
         }
 
-        .whatsapp-icon {
-            width: 20px;
-            height: 20px;
-            position: relative;
-            z-index: 1;
-        }
-
-        .submit-btn span {
-            position: relative;
-            z-index: 1;
-        }
-
-        .success-message {
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%) scale(0);
-            background: white;
-            padding: var(--spacing-xl);
-            border-radius: var(--radius-lg);
-            box-shadow: var(--shadow-xl);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: var(--spacing-md);
-            z-index: 1000;
-            opacity: 0;
-            transition: all var(--transition-slow);
-        }
-
-        .success-message.show {
-            transform: translate(-50%, -50%) scale(1);
-            opacity: 1;
-        }
-
-        .check-icon {
-            width: 64px;
-            height: 64px;
-            color: var(--primary);
-            stroke-width: 2;
-            stroke-dasharray: 100;
-            stroke-dashoffset: 100;
-        }
-
-        .success-message.show .check-icon {
-            animation: checkmark 0.6s ease-out forwards;
-        }
-
-        @keyframes checkmark {
-            to {
-                stroke-dashoffset: 0;
-            }
-        }
-
-        .success-message p {
-            font-size: 1.125rem;
-            font-weight: 600;
-            color: var(--text-primary);
-        }
-
-        /* Responsive Design */
-        @media (max-width: 640px) {
-            .container {
-                padding: var(--spacing-md);
-            }
-
-            .card {
-                border-radius: var(--radius-lg);
-            }
-
-            .card-header {
-                padding: var(--spacing-lg);
-            }
-
-            .card-header h1 {
-                font-size: 1.5rem;
-            }
-
-            .form {
-                padding: var(--spacing-lg);
-            }
-
-            .icon-wrapper {
-                width: 56px;
-                height: 56px;
-            }
-
-            .logo-svg {
-                width: 70px;
-                height: 35px;
-            }
-
-            .form-row {
-                grid-template-columns: 1fr;
-                gap: 0;
-            }
-
-            .form-row .form-group {
-                margin-bottom: var(--spacing-lg);
-            }
-        }
-
-        /* Loading State */
-        .submit-btn.loading {
-            pointer-events: none;
-            opacity: 0.7;
-        }
-
-        .submit-btn.loading::after {
+        .btn-submit::before {
             content: '';
             position: absolute;
-            width: 16px;
-            height: 16px;
-            border: 2px solid white;
-            border-top-color: transparent;
+            top: 50%; left: 50%;
+            width: 0; height: 0;
+            background: rgba(255,255,255,0.25);
             border-radius: 50%;
-            animation: spin 0.6s linear infinite;
+            transform: translate(-50%, -50%);
+            transition: width 0.7s, height 0.7s;
         }
 
-        @keyframes spin {
-            to {
-                transform: rotate(360deg);
-            }
+        .btn-submit:hover::before {
+            width: 400px; height: 400px;
         }
 
-        /* Focus Visible for Accessibility */
-        *:focus-visible {
-            outline: 2px solid var(--primary);
-            outline-offset: 2px;
+        .whatsapp-icon {
+            width: 22px;
+            height: 22px;
         }
 
-        /* CSS END */
+        /* Success overlay */
+        #success {
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.6);
+            display: grid;
+            place-items: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.4s;
+            z-index: 100;
+        }
+
+        #success.show {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .success-box {
+            background: white;
+            padding: 2.5rem 2rem;
+            border-radius: var(--radius);
+            text-align: center;
+            box-shadow: var(--shadow);
+            transform: scale(0.7);
+            transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        #success.show .success-box {
+            transform: scale(1);
+        }
+
+        .check {
+            width: 70px;
+            height: 70px;
+            color: #4ade80;
+            margin-bottom: 1rem;
+        }
     </style>
 </head>
-
 <body>
-    <div class="background-gradient"></div>
-    <div class="container">
-        <div class="card">
-            <div class="card-header">
-                <div class="icon-wrapper">
-                    <svg class="logo-svg" viewBox="0 0 100 40" xmlns="http://www.w3.org/2000/svg">
-                        <text x="50" y="28" font-family="Arial, sans-serif" font-size="24" font-weight="bold"
-                            fill="white" text-anchor="middle">RPM</text>
-                    </svg>
-                </div>
-                <h1>Daily Payment Request</h1>
-                <p class="subtitle">Jo details apeko pata ho wahi bharo, baaki fields khaali chhod sakte hai</p>
-            </div>
 
-            <form id="vehicleForm" class="form">
-                <div class="form-group">
-                    <label for="date">
-                        <span class="label-text">Date</span>
-                    </label>
-                    <div class="input-wrapper">
-                        <input type="date" id="date">
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <label for="ledger">
-                        <span class="label-text">Ledger Name</span>
-                    </label>
-                    <div class="input-wrapper">
-                        <select id="ledger">
-                            <option value="">Select ledger category</option>
-                            <option value="Warai Charges">Warai Charges</option>
-                            <option value="Loading & Unloading Charges">Loading & Unloading Charges</option>
-                            <option value="Petrol & Diesel & CNG Expenses">Petrol & Diesel & CNG Expenses</option>
-                            <option value="Vehicle Repairs & Maintenance">Vehicle Repairs & Maintenance</option>
-                            <option value="Vehicle Hire Charges">Vehicle Hire Charges</option>
-                            <option value="Lunch & Dinner Expenses">Lunch & Dinner Expenses</option>
-                            <option value="RTO Charges">RTO Charges</option>
-                            <option value="Vehicle Toll Charges">Vehicle Toll Charges</option>
-                            <option value="Other Expenses">Other Expenses</option>
-                        </select>
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <label for="amount">
-                        <span class="label-text">Amount</span>
-                    </label>
-                    <div class="input-wrapper amount-input">
-                        <span class="currency-symbol">₹</span>
-                        <input type="number" id="amount" placeholder="0.00" step="0.01" min="0">
-                    </div>
-                </div>
-
-                <div class="form-row">
-                    <div class="form-group">
-                        <label for="lrBranch">
-                            <span class="label-text">LR Branch</span>
-                        </label>
-                        <div class="input-wrapper">
-                            <input type="text" id="lrBranch" placeholder="Enter LR branch">
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="lrNo">
-                            <span class="label-text">LR No</span>
-                        </label>
-                        <div class="input-wrapper">
-                            <input type="text" id="lrNo" placeholder="Enter LR number">
-                        </div>
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <label for="vehicleNo">
-                        <span class="label-text">Vehicle No</span>
-                    </label>
-                    <div class="input-wrapper">
-                        <input type="text" id="vehicleNo" placeholder="e.g., MH 12 AB 1234">
-                    </div>
-                </div>
-
-                <div class="form-row">
-                    <div class="form-group">
-                        <label for="challanNo">
-                            <span class="label-text">Challan No</span>
-                        </label>
-                        <div class="input-wrapper">
-                            <input type="text" id="challanNo" placeholder="Enter challan number">
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="drsNo">
-                            <span class="label-text">DRS No</span>
-                        </label>
-                        <div class="input-wrapper">
-                            <input type="text" id="drsNo" placeholder="Enter DRS number">
-                        </div>
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <label for="spRemarks">
-                        <span class="label-text">SP Remarks</span>
-                    </label>
-                    <div class="input-wrapper">
-                        <textarea id="spRemarks" rows="3" placeholder="Add special remarks..."></textarea>
-                    </div>
-                </div>
-                <button type="submit" class="submit-btn">
-                    <svg class="whatsapp-icon" viewBox="0 0 24 24" fill="currentColor">
-                        <path
-                            d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
-                    </svg>
-                    <span>Submit via WhatsApp</span>
-                </button>
-            </form>
-
-            <div class="success-message" id="successMessage">
-                <svg class="check-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
-                    <polyline points="20 6 9 17 4 12"></polyline>
-                </svg>
-                <p>Form submitted successfully!</p>
-            </div>
-        </div>
+<div class="card">
+    <div class="header">
+        <h1>Daily Payment Request</h1>
+        <p>Jo details pata hain wahi bhariye — baaki chhod sakte hain</p>
     </div>
 
-    <script>
-        // JS START
-        // Configuration
-        const CONFIG = {
-            // Replace with your WhatsApp number (with country code, no + or spaces)
-            // Example: "919876543210" for Indian number
-            whatsappNumber: "916206494170", // CHANGE THIS TO YOUR NUMBER
+    <form id="paymentForm" class="form">
+        <div class="float-group">
+            <input type="date" id="date" required placeholder=" " value="">
+            <label for="date">Date</label>
+        </div>
 
-            // Success message display duration (milliseconds)
-            successMessageDuration: 2000
+        <div class="float-group">
+            <select id="ledger" required>
+                <option value="" selected disabled hidden></option>
+                <option value="Warai Charges">Warai Charges</option>
+                <option value="Loading & Unloading Charges">Loading & Unloading Charges</option>
+                <option value="Petrol & Diesel & CNG Expenses">Petrol & Diesel & CNG Expenses</option>
+                <option value="Vehicle Repairs & Maintenance">Vehicle Repairs & Maintenance</option>
+                <option value="Vehicle Hire Charges">Vehicle Hire Charges</option>
+                <option value="Lunch & Dinner Expenses">Lunch & Dinner Expenses</option>
+                <option value="RTO Charges">RTO Charges</option>
+                <option value="Vehicle Toll Charges">Vehicle Toll Charges</option>
+                <option value="Other Expenses">Other Expenses</option>
+            </select>
+            <label for="ledger">Ledger Name</label>
+        </div>
+
+        <div class="float-group amount-wrapper">
+            <span class="currency">₹</span>
+            <input type="number" id="amount" step="0.01" min="0" placeholder=" " required>
+            <label for="amount">Amount</label>
+        </div>
+
+        <div class="row">
+            <div class="float-group">
+                <input type="text" id="lrBranch" placeholder=" ">
+                <label for="lrBranch">LR Branch</label>
+            </div>
+            <div class="float-group">
+                <input type="text" id="lrNo" placeholder=" ">
+                <label for="lrNo">LR No</label>
+            </div>
+        </div>
+
+        <div class="float-group">
+            <input type="text" id="vehicleNo" placeholder="e.g. MH12AB1234" maxlength="12">
+            <label for="vehicleNo">Vehicle No</label>
+        </div>
+
+        <div class="row">
+            <div class="float-group">
+                <input type="text" id="challanNo" placeholder=" ">
+                <label for="challanNo">Challan No</label>
+            </div>
+            <div class="float-group">
+                <input type="text" id="drsNo" placeholder=" ">
+                <label for="drsNo">DRS No</label>
+            </div>
+        </div>
+
+        <div class="float-group">
+            <textarea id="spRemarks" rows="3" placeholder=" "></textarea>
+            <label for="spRemarks">SP Remarks</label>
+        </div>
+
+        <button type="submit" class="btn-submit">
+            <svg class="whatsapp-icon" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+            </svg>
+            Submit via WhatsApp
+        </button>
+    </form>
+</div>
+
+<div id="success">
+    <div class="success-box">
+        <svg class="check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+            <polyline points="20 6 9 17 4 12"></polyline>
+        </svg>
+        <h2>Submitted!</h2>
+        <p>Opening WhatsApp...</p>
+    </div>
+</div>
+
+<script>
+    const form = document.getElementById('paymentForm');
+    const success = document.getElementById('success');
+    const WHATSAPP_NUMBER = "916206494170"; // ← change here
+
+    // Today's date default
+    document.getElementById('date').value = new Date().toISOString().split('T')[0];
+
+    // Vehicle number uppercase
+    document.getElementById('vehicleNo').addEventListener('input', e => {
+        e.target.value = e.target.value.toUpperCase().replace(/\s+/g, '');
+    });
+
+    form.addEventListener('submit', e => {
+        e.preventDefault();
+
+        const data = {
+            date: document.getElementById('date').value,
+            ledger: document.getElementById('ledger').value,
+            amount: document.getElementById('amount').value,
+            lrBranch: document.getElementById('lrBranch').value.trim(),
+            lrNo: document.getElementById('lrNo').value.trim(),
+            vehicleNo: document.getElementById('vehicleNo').value.trim(),
+            challanNo: document.getElementById('challanNo').value.trim(),
+            drsNo: document.getElementById('drsNo').value.trim(),
+            spRemarks: document.getElementById('spRemarks').value.trim()
         };
 
-        // Set today's date as default
-        document.addEventListener('DOMContentLoaded', () => {
-            const dateInput = document.getElementById('date');
-            const today = new Date().toISOString().split('T')[0];
-            dateInput.value = today;
+        let msg = `💰 *Daily Payment Request*\n\n`;
+        if (data.date)    msg += `📅 *Date:* ${new Date(data.date).toLocaleDateString('en-IN', {day:'2-digit', month:'short', year:'numeric'})}\n`;
+        if (data.ledger)  msg += `📋 *Ledger:* ${data.ledger}\n`;
+        if (data.amount)  msg += `💵 *Amount:* ₹${Number(data.amount).toLocaleString('en-IN')}\n`;
+        msg += `💳 *Tr. Type:* \n🔢 *UTR No:* \n`;
+        if (data.lrBranch) msg += `🏢 *LR Branch:* ${data.lrBranch}\n`;
+        if (data.lrNo)     msg += `📄 *LR No:* ${data.lrNo}\n`;
+        if (data.vehicleNo) msg += `🚛 *Vehicle:* ${data.vehicleNo}\n`;
+        if (data.challanNo) msg += `📋 *Challan:* ${data.challanNo}\n`;
+        if (data.drsNo)     msg += `📑 *DRS:* ${data.drsNo}\n`;
+        if (data.spRemarks) msg += `\n📝 *Remarks:* ${data.spRemarks}\n`;
 
-            // Add input formatting for vehicle number
-            const vehicleInput = document.getElementById('vehicleNo');
-            vehicleInput.addEventListener('input', formatVehicleNumber);
+        const url = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(msg)}`;
 
-            // Add number formatting for amounts
-            const amountInput = document.getElementById('amount');
-            amountInput.addEventListener('blur', formatAmount);
-        });
+        // Show success
+        success.classList.add('show');
 
-        // Format vehicle number to uppercase
-        function formatVehicleNumber(e) {
-            e.target.value = e.target.value.toUpperCase();
-        }
-
-        // Format amount with proper decimals
-        function formatAmount(e) {
-            const value = parseFloat(e.target.value);
-            if (!isNaN(value) && value > 0) {
-                e.target.value = value.toFixed(2);
-            }
-        }
-
-        // Form submission handler
-        document.getElementById('vehicleForm').addEventListener('submit', function (e) {
-            e.preventDefault();
-
-            // Get form values
-            const formData = {
-                date: document.getElementById('date').value,
-                ledger: document.getElementById('ledger').value,
-                amount: document.getElementById('amount').value,
-                lrBranch: document.getElementById('lrBranch').value,
-                lrNo: document.getElementById('lrNo').value,
-                vehicleNo: document.getElementById('vehicleNo').value,
-                challanNo: document.getElementById('challanNo').value,
-                drsNo: document.getElementById('drsNo').value,
-                spRemarks: document.getElementById('spRemarks').value
-            };
-
-            // Format and send to WhatsApp
-            sendWhatsApp(formData);
-        });
-
-        function sendWhatsApp(data) {
-            // Helper function to format date
-            const formatDate = (dateStr) => {
-                if (!dateStr) return '';
-                const dateObj = new Date(dateStr);
-                return dateObj.toLocaleDateString('en-IN', {
-                    day: '2-digit',
-                    month: 'short',
-                    year: 'numeric'
-                });
-            };
-
-            // Helper function to format amount
-            const formatCurrency = (amount) => {
-                if (!amount) return '';
-                return parseFloat(amount).toLocaleString('en-IN', {
-                    minimumFractionDigits: 2,
-                    maximumFractionDigits: 2
-                });
-            };
-
-            // Build WhatsApp message
-            let message = `💰 *Daily Payment Request*\n\n`;
-
-            if (data.date) message += `📅 *Date:* ${formatDate(data.date)}\n`;
-            if (data.ledger) message += `📋 *Ledger Name:* ${data.ledger}\n`;
-            if (data.amount) message += `💰 *Amount:* ₹${formatCurrency(data.amount)}\n`;
-
-            // Hidden fields - always show with blank values
-            message += `💳 *Tr. Type:* \n`;
-            message += `🔢 *UTR No:* \n`;
-
-            if (data.lrBranch) message += `🏢 *LR Branch:* ${data.lrBranch}\n`;
-            if (data.lrNo) message += `📄 *LR No:* ${data.lrNo}\n`;
-            if (data.vehicleNo) message += `🚗 *Vehicle No:* ${data.vehicleNo}\n`;
-            if (data.challanNo) message += `📋 *Challan No:* ${data.challanNo}\n`;
-            if (data.drsNo) message += `📑 *DRS No:* ${data.drsNo}\n`;
-            if (data.spRemarks) message += `📝 *SP Remarks:* ${data.spRemarks}\n`;
-
-            // Create WhatsApp URL
-            const whatsappURL = `https://wa.me/${CONFIG.whatsappNumber}?text=${encodeURIComponent(message)}`;
-
-            // Show loading state
-            const submitBtn = document.querySelector('.submit-btn');
-            submitBtn.classList.add('loading');
-
-            // Show success message
+        setTimeout(() => {
+            window.open(url, '_blank');
             setTimeout(() => {
-                showSuccessMessage();
-                submitBtn.classList.remove('loading');
-
-                // Open WhatsApp
-                setTimeout(() => {
-                    window.open(whatsappURL, '_blank');
-
-                    // Reset form after successful submission
-                    setTimeout(() => {
-                        document.getElementById('vehicleForm').reset();
-                        // Reset date to today
-                        const today = new Date().toISOString().split('T')[0];
-                        document.getElementById('date').value = today;
-                    }, 500);
-                }, 500);
-            }, 300);
-        }
-
-        function showSuccessMessage() {
-            const successMessage = document.getElementById('successMessage');
-            successMessage.classList.add('show');
-
-            setTimeout(() => {
-                successMessage.classList.remove('show');
-            }, CONFIG.successMessageDuration);
-        }
-
-        // Add keyboard shortcuts
-        document.addEventListener('keydown', (e) => {
-            // Ctrl/Cmd + Enter to submit
-            if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
-                e.preventDefault();
-                document.getElementById('vehicleForm').dispatchEvent(new Event('submit'));
-            }
-
-            // Escape to clear form
-            if (e.key === 'Escape') {
-                if (confirm('Clear all form fields?')) {
-                    document.getElementById('vehicleForm').reset();
-                    const today = new Date().toISOString().split('T')[0];
-                    document.getElementById('date').value = today;
-                }
-            }
-        });
-
-        // Add smooth scroll behavior for better UX
-        document.querySelectorAll('input, select, textarea').forEach(element => {
-            element.addEventListener('focus', function () {
-                this.scrollIntoView({ behavior: 'smooth', block: 'center' });
-            });
-        });
-
-        // Prevent form submission on Enter key in text inputs (except textarea)
-        document.querySelectorAll('input').forEach(input => {
-            input.addEventListener('keypress', (e) => {
-                if (e.key === 'Enter') {
-                    e.preventDefault();
-                    // Move to next input
-                    const inputs = Array.from(document.querySelectorAll('input, select, textarea, button'));
-                    const index = inputs.indexOf(e.target);
-                    if (index < inputs.length - 1) {
-                        inputs[index + 1].focus();
-                    }
-                }
-            });
-        });
-        // JS END
-    </script>
+                success.classList.remove('show');
+                form.reset();
+                document.getElementById('date').value = new Date().toISOString().split('T')[0];
+            }, 800);
+        }, 1400);
+    });
+</script>
 </body>
-
 </html>
-
