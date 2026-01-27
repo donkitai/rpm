@@ -18,9 +18,7 @@
             --radius: 22px;
             --transition: 0.32s cubic-bezier(0.34, 1.56, 0.64, 1);
         }
-
         * { margin:0; padding:0; box-sizing:border-box; }
-
         body {
             font-family: 'Inter', system-ui, sans-serif;
             background: linear-gradient(135deg, #ff4d4d 0%, #ff8c66 100%);
@@ -30,7 +28,6 @@
             place-items: center;
             padding: 1.5rem;
         }
-
         .card {
             background: var(--card-bg);
             backdrop-filter: blur(18px);
@@ -43,12 +40,10 @@
             overflow: hidden;
             animation: appear 0.9s ease-out;
         }
-
         @keyframes appear {
             from { opacity: 0; transform: translateY(40px) scale(0.94); }
-            to   { opacity: 1; transform: translateY(0) scale(1); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
         }
-
         .header {
             background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
             color: white;
@@ -57,7 +52,6 @@
             position: relative;
             overflow: hidden;
         }
-
         .header::before {
             content: '';
             position: absolute;
@@ -66,25 +60,20 @@
             background: radial-gradient(circle, rgba(255,255,255,0.18) 0%, transparent 60%);
             animation: shine 12s linear infinite;
         }
-
         @keyframes shine {
             0% { transform: translateX(-100%) rotate(0deg); }
             100% { transform: translateX(100%) rotate(360deg); }
         }
-
         .header h1 { font-size: 2.1rem; font-weight: 700; margin-bottom: 0.5rem; letter-spacing: -0.5px; }
-        .header p   { font-size: 1rem; opacity: 0.92; }
-
+        .header p { font-size: 1rem; opacity: 0.92; }
         .form {
             padding: 2.2rem 2rem;
             display: grid;
             gap: 1.8rem;
         }
-
         .float-group {
             position: relative;
         }
-
         .float-group input,
         .float-group select,
         .float-group textarea {
@@ -98,7 +87,6 @@
             color: #1a1a1a;
             font-weight: 500;
         }
-
         .float-group input:focus,
         .float-group select:focus,
         .float-group textarea:focus {
@@ -108,7 +96,6 @@
             background: white;
             transform: translateY(-1px);
         }
-
         .float-group label {
             position: absolute;
             top: 1.15rem;
@@ -118,7 +105,6 @@
             pointer-events: none;
             transition: all var(--transition);
         }
-
         .float-group input:focus + label,
         .float-group input:not(:placeholder-shown) + label,
         .float-group select:focus + label,
@@ -130,17 +116,14 @@
             font-weight: 600;
             color: var(--primary);
         }
-
         /* Multiple entries styling */
         .multi-entry {
             position: relative;
             margin-bottom: 0.8rem;
         }
-
         .multi-entry input {
             padding-right: 2.8rem;
         }
-
         .remove-btn {
             position: absolute;
             right: 0.8rem;
@@ -159,7 +142,6 @@
             align-items: center;
             justify-content: center;
         }
-
         .add-more {
             background: rgba(255, 77, 77, 0.15);
             color: var(--primary);
@@ -173,11 +155,9 @@
             text-align: center;
             transition: all 0.2s;
         }
-
         .add-more:hover {
             background: rgba(255, 77, 77, 0.25);
         }
-
         .amount-wrapper { position: relative; }
         .amount-wrapper .rupee {
             position: absolute;
@@ -190,15 +170,12 @@
             pointer-events: none;
         }
         .amount-wrapper input { padding-left: 3.2rem !important; }
-
         .row {
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 1.6rem;
         }
-
         @media (max-width: 520px) { .row { grid-template-columns: 1fr; } }
-
         .btn {
             background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
             color: white;
@@ -217,12 +194,10 @@
             position: relative;
             overflow: hidden;
         }
-
         .btn:hover {
             transform: translateY(-3px);
             box-shadow: 0 16px 40px rgba(255, 77, 77, 0.55);
         }
-
         .btn::before {
             content: '';
             position: absolute;
@@ -233,11 +208,8 @@
             transform: translate(-50%, -50%);
             transition: width 0.8s, height 0.8s;
         }
-
         .btn:hover::before { width: 500px; height: 500px; }
-
         .whatsapp-icon { width: 26px; height: 26px; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3)); }
-
         #success {
             position: fixed;
             inset: 0;
@@ -249,9 +221,7 @@
             transition: opacity 0.5s;
             z-index: 999;
         }
-
         #success.show { opacity: 1; pointer-events: all; }
-
         .success-box {
             background: white;
             padding: 2.8rem 2.2rem;
@@ -261,9 +231,7 @@
             transform: scale(0.6);
             transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
         }
-
         #success.show .success-box { transform: scale(1); }
-
         .check-icon {
             width: 80px;
             height: 80px;
@@ -271,7 +239,6 @@
             margin-bottom: 1.2rem;
             animation: pop 0.6s ease-out;
         }
-
         @keyframes pop {
             0% { transform: scale(0); }
             60% { transform: scale(1.2); }
@@ -280,41 +247,62 @@
     </style>
 </head>
 <body>
-
 <div class="card">
     <div class="header">
         <h1>Daily Payment Request</h1>
         <p>Jo jaante ho wahi bharo – baaki chhod do!</p>
     </div>
-
     <form id="paymentForm" class="form">
         <div class="float-group">
             <input type="date" id="date" required placeholder=" " value="">
             <label for="date">Date</label>
         </div>
-
         <div class="float-group">
             <select id="ledger" required>
                 <option value="" selected disabled hidden></option>
-                <option value="Warai Charges">Warai Charges</option>
-                <option value="Loading & Unloading Charges">Loading & Unloading Charges</option>
-                <option value="Petrol & Diesel & CNG Expenses">Petrol & Diesel & CNG Expenses</option>
-                <option value="Vehicle Repairs & Maintenance">Vehicle Repairs & Maintenance</option>
+                <option value="Courier Charges">Courier Charges</option>
+                <option value="Electricity Charges">Electricity Charges</option>
+                <option value="Festivals Celebration Charges">Festivals Celebration Charges</option>
                 <option value="Vehicle Hire Charges">Vehicle Hire Charges</option>
+                <option value="Godown Expenses">Godown Expenses</option>
+                <option value="Handling Charges">Handling Charges</option>
+                <option value="Housekeeping Charges">Housekeeping Charges</option>
+                <option value="Internet Charges">Internet Charges</option>
+                <option value="Labour Charges">Labour Charges</option>
+                <option value="Loading & Unloading Charges">Loading & Unloading Charges</option>
                 <option value="Lunch & Dinner Expenses">Lunch & Dinner Expenses</option>
+                <option value="Medical Expenses">Medical Expenses</option>
+                <option value="Miscellaneous Expenses">Miscellaneous Expenses</option>
+                <option value="Mobile & Telephone Expenses">Mobile & Telephone Expenses</option>
+                <option value="Office Expenses">Office Expenses</option>
+                <option value="Petrol & Diesel Expenses">Petrol & Diesel Expenses</option>
+                <option value="Printing & Stationery Charges">Printing & Stationery Charges</option>
+                <option value="Rent Charges (Room)">Rent Charges (Room)</option>
+                <option value="Rent Charges (W/H)">Rent Charges (W/H)</option>
+                <option value="Rent Charges (P&M)">Rent Charges (P&M)</option>
+                <option value="Machine Repair & Maintenance">Machine Repair & Maintenance</option>
+                <option value="Road Tax, Permit & Vehicle Registration Charges">Road Tax, Permit & Vehicle Registration Charges</option>
                 <option value="RTO Charges">RTO Charges</option>
+                <option value="Salary Expenses">Salary Expenses</option>
+                <option value="Security Service Charges">Security Service Charges</option>
+                <option value="Tea & Snack Expenses">Tea & Snack Expenses</option>
+                <option value="Travelling Expenses">Travelling Expenses</option>
+                <option value="Vehicle Insurance Charges">Vehicle Insurance Charges</option>
+                <option value="Vehicle Repair & Maintenance Charges">Vehicle Repair & Maintenance Charges</option>
                 <option value="Vehicle Toll Charges">Vehicle Toll Charges</option>
-                <option value="Other Expenses">Other Expenses</option>
+                <option value="Warai Charges">Warai Charges</option>
+                <option value="Water Charges">Water Charges</option>
+                <option value="Computer Repairs & Maintenance">Computer Repairs & Maintenance</option>
+                <option value="Electric Repairing Charges">Electric Repairing Charges</option>
+                <option value="Godown Maintenance Charges">Godown Maintenance Charges</option>
             </select>
             <label for="ledger">Ledger Name</label>
         </div>
-
         <div class="float-group amount-wrapper">
             <span class="rupee">₹</span>
             <input type="tel" inputmode="numeric" pattern="[0-9]*" id="amount" placeholder=" " required>
             <label for="amount">Amount</label>
         </div>
-
         <!-- LR Branch - Multiple -->
         <div class="float-group" id="lrBranchSection">
             <label>LR Branch</label>
@@ -325,7 +313,6 @@
             </div>
             <button type="button" class="add-more" onclick="addEntry('lrBranch')">+ Add More Branch</button>
         </div>
-
         <div class="row">
             <!-- LR No - Multiple -->
             <div class="float-group">
@@ -337,14 +324,12 @@
                 </div>
                 <button type="button" class="add-more" onclick="addEntry('lrNo')">+ Add More LR No</button>
             </div>
-
             <!-- Vehicle No (single) -->
             <div class="float-group">
                 <input type="text" id="vehicleNo" placeholder=" " maxlength="12">
                 <label for="vehicleNo">Vehicle No</label>
             </div>
         </div>
-
         <div class="row">
             <!-- Challan No - Multiple -->
             <div class="float-group">
@@ -356,7 +341,6 @@
                 </div>
                 <button type="button" class="add-more" onclick="addEntry('challanNo')">+ Add More Challan</button>
             </div>
-
             <!-- DRS No - Multiple -->
             <div class="float-group">
                 <label>DRS No</label>
@@ -368,12 +352,10 @@
                 <button type="button" class="add-more" onclick="addEntry('drsNo')">+ Add More DRS</button>
             </div>
         </div>
-
         <div class="float-group">
             <textarea id="spRemarks" rows="3" placeholder=" "></textarea>
             <label for="spRemarks">SP Remarks</label>
         </div>
-
         <button type="submit" class="btn">
             <svg class="whatsapp-icon" viewBox="0 0 24 24" fill="currentColor">
                 <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
@@ -382,7 +364,6 @@
         </button>
     </form>
 </div>
-
 <div id="success">
     <div class="success-box">
         <svg class="check-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5">
@@ -396,27 +377,29 @@
 <script>
     const WHATSAPP_NUMBER = "917977781821";
 
-    // Today's date
+    // Today's date by default
     document.getElementById('date').value = new Date().toISOString().split('T')[0];
 
-    // Vehicle No uppercase + no space
+    // Vehicle No: uppercase + remove spaces
     document.getElementById('vehicleNo').addEventListener('input', e => {
         e.target.value = e.target.value.toUpperCase().replace(/\s+/g, '');
     });
 
-    // LR Branch uppercase + only letters & space
+    // LR Branch: uppercase + only letters & spaces
     document.querySelectorAll('.lr-branch-input').forEach(el => {
         el.addEventListener('input', function() {
             this.value = this.value.toUpperCase().replace(/[^A-Z\s]/g, '');
         });
     });
 
-    // Numeric fields only digits
+    // Numeric fields: only digits
     ['amount', ...document.querySelectorAll('.lr-no-input, .challan-no-input, .drs-no-input')].forEach(el => {
         if (typeof el === 'string') el = document.getElementById(el);
-        el.addEventListener('input', function() {
-            this.value = this.value.replace(/[^0-9]/g, '');
-        });
+        if (el) {
+            el.addEventListener('input', function() {
+                this.value = this.value.replace(/[^0-9]/g, '');
+            });
+        }
     });
 
     // Add more entry function
@@ -429,10 +412,12 @@
         let inputType = 'text';
         let inputMode = '';
         let pattern = '';
+        let maxLength = 20;
 
         if (type === 'lrBranch') {
             inputClass = 'lr-branch-input';
             inputType = 'text';
+            maxLength = 50;
         } else if (type === 'lrNo') {
             inputClass = 'lr-no-input';
             inputType = 'tel';
@@ -454,7 +439,7 @@
         input.type = inputType;
         input.className = inputClass;
         input.placeholder = ' ';
-        input.maxLength = type === 'lrBranch' ? 50 : 20;
+        input.maxLength = maxLength;
         if (inputMode) input.setAttribute('inputmode', inputMode);
         if (pattern) input.setAttribute('pattern', pattern);
 
@@ -468,7 +453,7 @@
         newEntry.appendChild(removeBtn);
         container.appendChild(newEntry);
 
-        // Re-attach filters to new input
+        // Re-attach input filters
         if (type === 'lrBranch') {
             input.addEventListener('input', function() {
                 this.value = this.value.toUpperCase().replace(/[^A-Z\s]/g, '');
@@ -480,7 +465,7 @@
         }
     }
 
-    // Form submit
+    // Form submission
     document.getElementById('paymentForm').addEventListener('submit', e => {
         e.preventDefault();
 
@@ -513,15 +498,15 @@
         }
 
         let msg = `💰 *Daily Payment Request*\n\n`;
-        if (data.date)    msg += `📅 *Date:* ${formattedDate}\n`;
-        if (data.ledger)  msg += `📋 *Ledger Name:* ${data.ledger}\n`;
-        if (data.amount)  msg += `💰 *Amount:* ₹${Number(data.amount).toLocaleString('en-IN', {minimumFractionDigits:2, maximumFractionDigits:2})}\n`;
+        if (data.date) msg += `📅 *Date:* ${formattedDate}\n`;
+        if (data.ledger) msg += `📋 *Ledger Name:* ${data.ledger}\n`;
+        if (data.amount) msg += `💰 *Amount:* ₹${Number(data.amount).toLocaleString('en-IN', {minimumFractionDigits:2, maximumFractionDigits:2})}\n`;
         msg += `💳 *Tr. Type:* \n🔢 *UTR No:* \n`;
         if (data.lrBranch) msg += `🏢 *LR Branch:* ${data.lrBranch}\n`;
-        if (data.lrNo)     msg += `📄 *LR No:* ${data.lrNo}\n`;
+        if (data.lrNo) msg += `📄 *LR No:* ${data.lrNo}\n`;
         if (data.vehicleNo) msg += `🚗 *Vehicle No:* ${data.vehicleNo}\n`;
         if (data.challanNo) msg += `📋 *Challan No:* ${data.challanNo}\n`;
-        if (data.drsNo)     msg += `📑 *DRS No:* ${data.drsNo}\n`;
+        if (data.drsNo) msg += `📑 *DRS No:* ${data.drsNo}\n`;
         if (data.spRemarks) msg += `\n📝 *SP Remarks:* ${data.spRemarks}\n`;
 
         const url = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(msg)}`;
@@ -532,7 +517,7 @@
             window.open(url, '_blank');
             setTimeout(() => {
                 document.getElementById('success').classList.remove('show');
-                location.reload(); // full reset (simple way)
+                location.reload(); // reset form
             }, 1000);
         }, 1600);
     });
