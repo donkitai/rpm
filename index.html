@@ -116,7 +116,6 @@
             font-weight: 600;
             color: var(--primary);
         }
-        /* Multiple entries styling */
         .multi-entry {
             position: relative;
             margin-bottom: 0.8rem;
@@ -218,6 +217,7 @@
             box-shadow: var(--shadow);
             transform: scale(0.6);
             transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+            max-width: 90%;
         }
         #success.show .success-box { transform: scale(1); }
         .check-icon {
@@ -234,6 +234,23 @@
         }
         .reference-section { display: none; }
         .reference-section.active { display: block; }
+        .open-whatsapp-btn {
+            display: inline-block;
+            margin-top: 1.5rem;
+            padding: 1rem 2.2rem;
+            background: var(--primary);
+            color: white;
+            border-radius: 12px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.1rem;
+            box-shadow: 0 4px 12px rgba(255, 77, 77, 0.3);
+            transition: all 0.2s;
+        }
+        .open-whatsapp-btn:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+        }
     </style>
 </head>
 <body>
@@ -292,7 +309,7 @@
             <input type="tel" inputmode="numeric" pattern="[0-9]*" id="amount" placeholder=" " required>
             <label for="amount">Amount</label>
         </div>
-        <!-- LR Branch - Multiple (kept as is) -->
+        <!-- LR Branch -->
         <div class="float-group" id="lrBranchSection">
             <label>LR Branch</label>
             <div id="lrBranchEntries">
@@ -302,12 +319,12 @@
             </div>
             <button type="button" class="add-more" onclick="addEntry('lrBranch')">+ Add More Branch</button>
         </div>
-        <!-- Vehicle No (single) -->
+        <!-- Vehicle No -->
         <div class="float-group">
             <input type="text" id="vehicleNo" placeholder=" " maxlength="12">
             <label for="vehicleNo">Vehicle No</label>
         </div>
-        <!-- Single dropdown for reference type + conditional fields -->
+        <!-- Reference Type -->
         <div class="float-group">
             <select id="referenceType" onchange="showReferenceField()">
                 <option value="">-- Select Reference Type --</option>
@@ -317,7 +334,7 @@
             </select>
             <label for="referenceType">Reference Type</label>
         </div>
-        <!-- LR No section (hidden by default) -->
+        <!-- LR No -->
         <div class="float-group reference-section" id="lrNoSection">
             <label>LR No</label>
             <div id="lrNoEntries">
@@ -327,7 +344,7 @@
             </div>
             <button type="button" class="add-more" onclick="addEntry('lrNo')">+ Add More LR No</button>
         </div>
-        <!-- Challan No section (hidden by default) -->
+        <!-- Challan No -->
         <div class="float-group reference-section" id="challanNoSection">
             <label>Challan No</label>
             <div id="challanNoEntries">
@@ -337,7 +354,7 @@
             </div>
             <button type="button" class="add-more" onclick="addEntry('challanNo')">+ Add More Challan</button>
         </div>
-        <!-- DRS No section (hidden by default) -->
+        <!-- DRS No -->
         <div class="float-group reference-section" id="drsNoSection">
             <label>DRS No</label>
             <div id="drsNoEntries">
@@ -359,13 +376,15 @@
         </button>
     </form>
 </div>
+
 <div id="success">
     <div class="success-box">
         <svg class="check-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5">
             <polyline points="20 6 9 17 4 12"></polyline>
         </svg>
         <h2>Success!</h2>
-        <p>WhatsApp khul raha hai...</p>
+        <p>Tap below to open WhatsApp</p>
+        <!-- The button will be added dynamically via JS -->
     </div>
 </div>
 
@@ -387,7 +406,7 @@
         });
     });
 
-    // Numeric only for amount & reference numbers
+    // Numeric only
     document.querySelectorAll('#amount, .lr-no-input, .challan-no-input, .drs-no-input').forEach(el => {
         el.addEventListener('input', function() {
             this.value = this.value.replace(/[^0-9]/g, '');
@@ -428,7 +447,6 @@
         newEntry.appendChild(removeBtn);
         container.appendChild(newEntry);
 
-        // Re-attach validation
         if (type === 'lrBranch') {
             input.addEventListener('input', function() {
                 this.value = this.value.toUpperCase().replace(/[^A-Z\s]/g, '');
@@ -440,19 +458,15 @@
         }
     }
 
-    // Show/hide reference field based on dropdown
     function showReferenceField() {
         const select = document.getElementById('referenceType');
         const value = select.value;
-        document.querySelectorAll('.reference-section').forEach(sec => {
-            sec.classList.remove('active');
-        });
+        document.querySelectorAll('.reference-section').forEach(sec => sec.classList.remove('active'));
         if (value) {
             document.getElementById(value + 'Section').classList.add('active');
         }
     }
 
-    // Form submit
     document.getElementById('paymentForm').addEventListener('submit', e => {
         e.preventDefault();
 
@@ -496,7 +510,7 @@
         if (data.ledger) msg += `📋 *Ledger Name:* ${data.ledger}\n`;
         if (data.amount) {
             const amtNum = Number(data.amount);
-            msg += `💰 *Amount:* ₹${amtNum.toLocaleString('en-IN')}\n`;  // No .00
+            msg += `💰 *Amount:* ₹${amtNum.toLocaleString('en-IN')}\n`;
         }
         msg += `💳 *Tr. Type:* \n🔢 *UTR No:* \n`;
         if (data.lrBranch) msg += `🏢 *LR Branch:* ${data.lrBranch}\n`;
@@ -508,14 +522,29 @@
 
         const url = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(msg)}`;
 
-        document.getElementById('success').classList.add('show');
+        // Show success popup
+        const successEl = document.getElementById('success');
+        successEl.classList.add('show');
+
+        // Update text
+        document.querySelector('#success p').textContent = "Tap below to open WhatsApp";
+
+        // Add clickable WhatsApp button
+        const successBox = document.querySelector('.success-box');
+        const openBtn = document.createElement('a');
+        openBtn.href = url;
+        openBtn.target = '_blank';
+        openBtn.rel = 'noopener noreferrer';
+        openBtn.className = 'open-whatsapp-btn';
+        openBtn.textContent = 'Open in WhatsApp';
+        successBox.appendChild(openBtn);
+
+        // Auto-close after 12 seconds (or user can tap the button)
         setTimeout(() => {
-            window.open(url, '_blank');
-            setTimeout(() => {
-                document.getElementById('success').classList.remove('show');
-                location.reload();
-            }, 1000);
-        }, 1600);
+            successEl.classList.remove('show');
+            openBtn.remove();
+            location.reload();
+        }, 12000);
     });
 </script>
 </body>
