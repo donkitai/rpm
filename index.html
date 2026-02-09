@@ -116,6 +116,7 @@
             font-weight: 600;
             color: var(--primary);
         }
+        /* Multiple entries styling */
         .multi-entry {
             position: relative;
             margin-bottom: 0.8rem;
@@ -157,18 +158,6 @@
         .add-more:hover {
             background: rgba(255, 77, 77, 0.25);
         }
-        .amount-wrapper { position: relative; }
-        .amount-wrapper .rupee {
-            position: absolute;
-            left: 1.1rem;
-            top: 50%;
-            transform: translateY(-50%);
-            font-size: 1.4rem;
-            font-weight: 700;
-            color: var(--primary);
-            pointer-events: none;
-        }
-        .amount-wrapper input { padding-left: 3.2rem !important; }
         .row {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -299,12 +288,10 @@
             </select>
             <label for="ledger">Ledger Name</label>
         </div>
-        <div class="float-group amount-wrapper">
-            <span class="rupee">₹</span>
+        <div class="float-group">
             <input type="tel" inputmode="numeric" pattern="[0-9]*" id="amount" placeholder=" " required>
             <label for="amount">Amount</label>
         </div>
-
         <!-- LR Branch - Multiple (kept as is) -->
         <div class="float-group" id="lrBranchSection">
             <label>LR Branch</label>
@@ -315,13 +302,11 @@
             </div>
             <button type="button" class="add-more" onclick="addEntry('lrBranch')">+ Add More Branch</button>
         </div>
-
         <!-- Vehicle No (single) -->
         <div class="float-group">
             <input type="text" id="vehicleNo" placeholder=" " maxlength="12">
             <label for="vehicleNo">Vehicle No</label>
         </div>
-
         <!-- Single dropdown for reference type + conditional fields -->
         <div class="float-group">
             <select id="referenceType" onchange="showReferenceField()">
@@ -332,7 +317,6 @@
             </select>
             <label for="referenceType">Reference Type</label>
         </div>
-
         <!-- LR No section (hidden by default) -->
         <div class="float-group reference-section" id="lrNoSection">
             <label>LR No</label>
@@ -343,7 +327,6 @@
             </div>
             <button type="button" class="add-more" onclick="addEntry('lrNo')">+ Add More LR No</button>
         </div>
-
         <!-- Challan No section (hidden by default) -->
         <div class="float-group reference-section" id="challanNoSection">
             <label>Challan No</label>
@@ -354,7 +337,6 @@
             </div>
             <button type="button" class="add-more" onclick="addEntry('challanNo')">+ Add More Challan</button>
         </div>
-
         <!-- DRS No section (hidden by default) -->
         <div class="float-group reference-section" id="drsNoSection">
             <label>DRS No</label>
@@ -365,12 +347,10 @@
             </div>
             <button type="button" class="add-more" onclick="addEntry('drsNo')">+ Add More DRS</button>
         </div>
-
         <div class="float-group">
             <textarea id="spRemarks" rows="3" placeholder=" "></textarea>
             <label for="spRemarks">SP Remarks</label>
         </div>
-
         <button type="submit" class="btn">
             <svg class="whatsapp-icon" viewBox="0 0 24 24" fill="currentColor">
                 <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
@@ -379,7 +359,6 @@
         </button>
     </form>
 </div>
-
 <div id="success">
     <div class="success-box">
         <svg class="check-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5">
@@ -409,20 +388,16 @@
     });
 
     // Numeric only for amount & reference numbers
-    ['amount', ...document.querySelectorAll('.lr-no-input, .challan-no-input, .drs-no-input')].forEach(el => {
-        if (typeof el === 'string') el = document.getElementById(el);
-        if (el) {
-            el.addEventListener('input', function() {
-                this.value = this.value.replace(/[^0-9]/g, '');
-            });
-        }
+    document.querySelectorAll('#amount, .lr-no-input, .challan-no-input, .drs-no-input').forEach(el => {
+        el.addEventListener('input', function() {
+            this.value = this.value.replace(/[^0-9]/g, '');
+        });
     });
 
     function addEntry(type) {
         const container = document.getElementById(type + 'Entries');
         const newEntry = document.createElement('div');
         newEntry.className = 'multi-entry';
-
         let inputClass = '';
         let maxLength = 20;
         if (type === 'lrBranch') {
@@ -435,7 +410,6 @@
         } else if (type === 'drsNo') {
             inputClass = 'drs-no-input';
         }
-
         const input = document.createElement('input');
         input.type = (type === 'lrBranch') ? 'text' : 'tel';
         input.className = inputClass;
@@ -445,13 +419,11 @@
             input.setAttribute('inputmode', 'numeric');
             input.setAttribute('pattern', '[0-9]*');
         }
-
         const removeBtn = document.createElement('button');
         removeBtn.type = 'button';
         removeBtn.className = 'remove-btn';
         removeBtn.textContent = '×';
         removeBtn.onclick = () => newEntry.remove();
-
         newEntry.appendChild(input);
         newEntry.appendChild(removeBtn);
         container.appendChild(newEntry);
@@ -472,11 +444,9 @@
     function showReferenceField() {
         const select = document.getElementById('referenceType');
         const value = select.value;
-
         document.querySelectorAll('.reference-section').forEach(sec => {
             sec.classList.remove('active');
         });
-
         if (value) {
             document.getElementById(value + 'Section').classList.add('active');
         }
@@ -490,8 +460,8 @@
             .map(el => el.value.trim()).filter(v => v);
 
         let lrNos = [], challanNos = [], drsNos = [];
-
         const refType = document.getElementById('referenceType').value;
+
         if (refType === 'lrNo') {
             lrNos = Array.from(document.querySelectorAll('.lr-no-input'))
                 .map(el => el.value.trim()).filter(v => v);
@@ -524,7 +494,10 @@
         let msg = `💰 *Daily Payment Request*\n\n`;
         if (data.date) msg += `📅 *Date:* ${formattedDate}\n`;
         if (data.ledger) msg += `📋 *Ledger Name:* ${data.ledger}\n`;
-        if (data.amount) msg += `💰 *Amount:* ₹${Number(data.amount).toLocaleString('en-IN', {minimumFractionDigits:2, maximumFractionDigits:2})}\n`;
+        if (data.amount) {
+            const amtNum = Number(data.amount);
+            msg += `💰 *Amount:* ₹${amtNum.toLocaleString('en-IN')}\n`;  // No .00
+        }
         msg += `💳 *Tr. Type:* \n🔢 *UTR No:* \n`;
         if (data.lrBranch) msg += `🏢 *LR Branch:* ${data.lrBranch}\n`;
         if (data.lrNo) msg += `📄 *LR No:* ${data.lrNo}\n`;
@@ -547,4 +520,3 @@
 </script>
 </body>
 </html>
-
