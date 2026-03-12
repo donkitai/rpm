@@ -1,132 +1,242 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Daily Payment Request • RPM Logistics</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
     <style>
         :root {
             --primary: #ff4d4d;
             --primary-dark: #e63939;
-            --primary-glow: rgba(255, 77, 77, 0.4);
-            --card-bg: rgba(255, 255, 255, 0.75);
-            --border: rgba(255, 77, 77, 0.25);
-            --shadow: 0 12px 40px rgba(255, 77, 77, 0.18);
-            --radius: 22px;
+            --primary-glow: rgba(255, 77, 77, 0.35);
+            --radius: 20px;
             --transition: 0.32s cubic-bezier(0.34, 1.56, 0.64, 1);
         }
-        * { margin:0; padding:0; box-sizing:border-box; }
+
+        [data-theme="dark"] {
+            --bg-body: linear-gradient(135deg, #1a0a0a 0%, #2d1010 50%, #1a0808 100%);
+            --card-bg: rgba(255, 255, 255, 0.06);
+            --card-border: rgba(255, 77, 77, 0.2);
+            --card-shadow: 0 24px 60px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255,77,77,0.1);
+            --input-bg: rgba(255, 255, 255, 0.06);
+            --input-border: rgba(255, 77, 77, 0.22);
+            --input-focus-bg: rgba(255, 255, 255, 0.1);
+            --text-primary: #f5f0f0;
+            --text-secondary: #a08080;
+            --text-label: #c08888;
+            --header-bg: linear-gradient(135deg, #ff4d4d 0%, #c02020 100%);
+            --toggle-bg: rgba(255,255,255,0.1);
+            --toggle-border: rgba(255,255,255,0.15);
+            --success-bg: #1a0a0a;
+            --success-text: #f5f0f0;
+        }
+
+        [data-theme="light"] {
+            --bg-body: linear-gradient(135deg, #fff5f5 0%, #ffe0e0 50%, #fff0f0 100%);
+            --card-bg: rgba(255, 255, 255, 0.88);
+            --card-border: rgba(255, 77, 77, 0.18);
+            --card-shadow: 0 24px 60px rgba(255, 77, 77, 0.12), 0 0 0 1px rgba(255,77,77,0.08);
+            --input-bg: rgba(255, 255, 255, 0.7);
+            --input-border: rgba(255, 77, 77, 0.25);
+            --input-focus-bg: #ffffff;
+            --text-primary: #1a0505;
+            --text-secondary: #6b4040;
+            --text-label: #c05050;
+            --header-bg: linear-gradient(135deg, #ff4d4d 0%, #e03030 100%);
+            --toggle-bg: rgba(255,77,77,0.1);
+            --toggle-border: rgba(255,77,77,0.2);
+            --success-bg: #ffffff;
+            --success-text: #1a0505;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
         body {
-            font-family: 'Inter', system-ui, sans-serif;
-            background: linear-gradient(135deg, #ff4d4d 0%, #ff8c66 100%);
+            font-family: 'DM Sans', system-ui, sans-serif;
+            background: var(--bg-body);
             min-height: 100vh;
-            color: #1a1a1a;
+            color: var(--text-primary);
             display: grid;
             place-items: center;
             padding: 1.5rem;
+            transition: background 0.4s ease;
         }
+
+        .theme-toggle {
+            position: fixed;
+            top: 1.2rem;
+            right: 1.2rem;
+            z-index: 100;
+            background: var(--toggle-bg);
+            border: 1px solid var(--toggle-border);
+            border-radius: 50px;
+            padding: 0.45rem 1rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-family: 'DM Sans', sans-serif;
+            font-size: 0.82rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            backdrop-filter: blur(12px);
+            transition: all 0.3s ease;
+            letter-spacing: 0.02em;
+        }
+
+        .theme-toggle:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 20px rgba(255,77,77,0.25);
+        }
+
+        .theme-toggle .icon { font-size: 1rem; }
+
         .card {
             background: var(--card-bg);
-            backdrop-filter: blur(18px);
-            -webkit-backdrop-filter: blur(18px);
-            border: 1px solid var(--border);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border: 1px solid var(--card-border);
             border-radius: var(--radius);
-            box-shadow: var(--shadow);
+            box-shadow: var(--card-shadow);
             width: 100%;
             max-width: 560px;
             overflow: hidden;
-            animation: appear 0.9s ease-out;
+            animation: appear 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+            transition: background 0.4s ease, border-color 0.4s ease, box-shadow 0.4s ease;
         }
+
         @keyframes appear {
-            from { opacity: 0; transform: translateY(40px) scale(0.94); }
+            from { opacity: 0; transform: translateY(32px) scale(0.96); }
             to { opacity: 1; transform: translateY(0) scale(1); }
         }
+
         .header {
-            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            background: var(--header-bg);
             color: white;
-            padding: 2.4rem 2rem 1.8rem;
+            padding: 2.4rem 2rem 2rem;
             text-align: center;
             position: relative;
             overflow: hidden;
         }
-        .header::before {
+
+        .header::after {
             content: '';
             position: absolute;
-            top: -50%; left: -50%;
-            width: 200%; height: 200%;
-            background: radial-gradient(circle, rgba(255,255,255,0.18) 0%, transparent 60%);
-            animation: shine 12s linear infinite;
+            bottom: -1px; left: 0; right: 0;
+            height: 20px;
+            background: var(--card-bg);
+            border-radius: 20px 20px 0 0;
         }
-        @keyframes shine {
-            0% { transform: translateX(-100%) rotate(0deg); }
-            100% { transform: translateX(100%) rotate(360deg); }
+
+        .header-logo {
+            font-family: 'Syne', sans-serif;
+            font-size: 0.75rem;
+            font-weight: 600;
+            letter-spacing: 0.25em;
+            text-transform: uppercase;
+            opacity: 0.75;
+            margin-bottom: 0.8rem;
         }
-        .header h1 { font-size: 2.1rem; font-weight: 700; margin-bottom: 0.5rem; letter-spacing: -0.5px; }
-        .header p { font-size: 1rem; opacity: 0.92; }
+
+        .header h1 {
+            font-family: 'Syne', sans-serif;
+            font-size: 1.85rem;
+            font-weight: 800;
+            letter-spacing: -0.03em;
+            margin-bottom: 0.4rem;
+        }
+
+        .header p {
+            font-size: 0.88rem;
+            opacity: 0.82;
+            font-style: italic;
+        }
+
         .form {
-            padding: 2.2rem 2rem;
+            padding: 2rem 1.8rem 2.2rem;
             display: grid;
-            gap: 1.8rem;
+            gap: 1.4rem;
         }
+
         .float-group {
             position: relative;
         }
+
+        .float-group > label:first-child {
+            display: block;
+            font-size: 0.78rem;
+            font-weight: 600;
+            color: var(--text-label);
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            margin-bottom: 0.5rem;
+        }
+
         .float-group input,
         .float-group select,
         .float-group textarea {
             width: 100%;
-            padding: 1.25rem 1.1rem 0.5rem;
-            font-size: 1.05rem;
-            background: rgba(255,255,255,0.55);
-            border: 1.5px solid var(--border);
-            border-radius: 16px;
-            transition: all var(--transition);
-            color: #1a1a1a;
+            padding: 0.85rem 1rem;
+            font-size: 0.98rem;
+            font-family: 'DM Sans', sans-serif;
+            background: var(--input-bg);
+            border: 1.5px solid var(--input-border);
+            border-radius: 12px;
+            transition: all 0.25s ease;
+            color: var(--text-primary);
             font-weight: 500;
         }
+
+        .float-group select option {
+            background: #1a0a0a;
+            color: #f5f0f0;
+        }
+
+        [data-theme="light"] .float-group select option {
+            background: #ffffff;
+            color: #1a0505;
+        }
+
         .float-group input:focus,
         .float-group select:focus,
         .float-group textarea:focus {
             outline: none;
             border-color: var(--primary);
-            box-shadow: 0 0 0 5px var(--primary-glow);
-            background: white;
-            transform: translateY(-1px);
+            box-shadow: 0 0 0 4px var(--primary-glow);
+            background: var(--input-focus-bg);
         }
-        .float-group label {
-            position: absolute;
-            top: 1.15rem;
-            left: 1.2rem;
-            font-size: 1.05rem;
-            color: #6b7280;
-            pointer-events: none;
-            transition: all var(--transition);
+
+        .float-group input::placeholder,
+        .float-group textarea::placeholder {
+            color: var(--text-secondary);
+            opacity: 0.6;
         }
-        .float-group input:focus + label,
-        .float-group input:not(:placeholder-shown) + label,
-        .float-group select:focus + label,
-        .float-group select:not([value=""]) + label,
-        .float-group textarea:focus + label,
-        .float-group textarea:not(:placeholder-shown) + label {
-            top: 0.45rem;
-            font-size: 0.82rem;
+
+        .field-label {
+            display: block;
+            font-size: 0.78rem;
             font-weight: 600;
-            color: var(--primary);
+            color: var(--text-label);
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            margin-bottom: 0.5rem;
         }
-        /* Multiple entries styling */
+
         .multi-entry {
             position: relative;
-            margin-bottom: 0.8rem;
+            margin-bottom: 0.6rem;
         }
+
         .multi-entry input {
-            padding-right: 2.8rem;
+            padding-right: 2.6rem;
         }
+
         .remove-btn {
             position: absolute;
-            right: 0.8rem;
+            right: 0.75rem;
             top: 50%;
             transform: translateY(-50%);
             background: #ef4444;
@@ -135,222 +245,285 @@
             border-radius: 50%;
             width: 22px;
             height: 22px;
-            font-size: 1.1rem;
-            line-height: 1;
+            font-size: 1rem;
             cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
+            line-height: 1;
+            transition: transform 0.2s ease, background 0.2s ease;
         }
+
+        .remove-btn:hover {
+            background: #dc2626;
+            transform: translateY(-50%) scale(1.1);
+        }
+
         .add-more {
-            background: rgba(255, 77, 77, 0.15);
+            background: transparent;
             color: var(--primary);
-            border: 1px dashed var(--primary);
-            border-radius: 12px;
-            padding: 0.6rem 1rem;
-            font-size: 0.95rem;
+            border: 1.5px dashed rgba(255, 77, 77, 0.4);
+            border-radius: 10px;
+            padding: 0.55rem 1rem;
+            font-size: 0.88rem;
+            font-family: 'DM Sans', sans-serif;
+            font-weight: 600;
             cursor: pointer;
-            margin-top: 0.5rem;
+            margin-top: 0.4rem;
             width: 100%;
             text-align: center;
-            transition: all 0.2s;
+            transition: all 0.2s ease;
+            letter-spacing: 0.02em;
         }
+
         .add-more:hover {
-            background: rgba(255, 77, 77, 0.25);
+            background: rgba(255, 77, 77, 0.1);
+            border-color: var(--primary);
         }
+
         .row {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 1.6rem;
+            gap: 1.2rem;
         }
-        @media (max-width: 520px) { .row { grid-template-columns: 1fr; } }
+
+        @media (max-width: 480px) { .row { grid-template-columns: 1fr; } }
+
+        .divider {
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--input-border), transparent);
+            margin: 0.2rem 0;
+        }
+
         .btn {
-            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            background: linear-gradient(135deg, #ff4d4d 0%, #c02020 100%);
             color: white;
             border: none;
-            padding: 1.25rem;
-            font-size: 1.1rem;
+            padding: 1.1rem;
+            font-size: 1rem;
+            font-family: 'Syne', sans-serif;
             font-weight: 700;
-            border-radius: 16px;
+            letter-spacing: 0.04em;
+            border-radius: 14px;
             cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 0.8rem;
-            transition: all var(--transition);
-            box-shadow: 0 8px 30px rgba(255, 77, 77, 0.4);
+            gap: 0.75rem;
+            transition: all 0.28s ease;
+            box-shadow: 0 6px 28px rgba(255, 77, 77, 0.38);
             position: relative;
             overflow: hidden;
         }
-        .btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 16px 40px rgba(255, 77, 77, 0.55);
-        }
+
         .btn::before {
             content: '';
             position: absolute;
-            top: 50%; left: 50%;
-            width: 0; height: 0;
-            background: rgba(255,255,255,0.3);
-            border-radius: 50%;
-            transform: translate(-50%, -50%);
-            transition: width 0.8s, height 0.8s;
+            inset: 0;
+            background: linear-gradient(135deg, rgba(255,255,255,0.15) 0%, transparent 60%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
         }
-        .btn:hover::before { width: 500px; height: 500px; }
-        .whatsapp-icon { width: 26px; height: 26px; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3)); }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 40px rgba(255, 77, 77, 0.5);
+        }
+
+        .btn:hover::before { opacity: 1; }
+
+        .btn:active { transform: translateY(0); }
+
+        .whatsapp-icon { width: 22px; height: 22px; }
+
+        .reference-section { display: none; }
+        .reference-section.active { display: block; }
+
         #success {
             position: fixed;
             inset: 0;
-            background: rgba(0,0,0,0.65);
+            background: rgba(0, 0, 0, 0.7);
             display: grid;
             place-items: center;
             opacity: 0;
             pointer-events: none;
-            transition: opacity 0.5s;
+            transition: opacity 0.4s ease;
             z-index: 999;
+            backdrop-filter: blur(6px);
         }
+
         #success.show { opacity: 1; pointer-events: all; }
+
         .success-box {
-            background: white;
-            padding: 2.8rem 2.2rem;
+            background: var(--success-bg);
+            padding: 2.8rem 2.4rem;
             border-radius: var(--radius);
             text-align: center;
-            box-shadow: var(--shadow);
-            transform: scale(0.6);
-            transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+            box-shadow: 0 30px 80px rgba(0,0,0,0.4);
+            transform: scale(0.7) translateY(20px);
+            transition: transform 0.45s cubic-bezier(0.34, 1.56, 0.64, 1);
+            border: 1px solid rgba(255,77,77,0.2);
         }
-        #success.show .success-box { transform: scale(1); }
+
+        #success.show .success-box { transform: scale(1) translateY(0); }
+
         .check-icon {
-            width: 80px;
-            height: 80px;
+            width: 70px;
+            height: 70px;
             color: #22c55e;
-            margin-bottom: 1.2rem;
-            animation: pop 0.6s ease-out;
+            margin-bottom: 1rem;
+            animation: pop 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
         }
+
+        .success-box h2 {
+            font-family: 'Syne', sans-serif;
+            font-size: 1.6rem;
+            font-weight: 800;
+            color: var(--success-text);
+            margin-bottom: 0.4rem;
+        }
+
+        .success-box p {
+            color: var(--text-secondary);
+            font-size: 0.92rem;
+        }
+
         @keyframes pop {
-            0% { transform: scale(0); }
-            60% { transform: scale(1.2); }
-            100% { transform: scale(1); }
+            0% { transform: scale(0) rotate(-10deg); }
+            60% { transform: scale(1.15) rotate(5deg); }
+            100% { transform: scale(1) rotate(0deg); }
         }
-        .reference-section { display: none; }
-        .reference-section.active { display: block; }
     </style>
 </head>
 <body>
+
+<button class="theme-toggle" onclick="toggleTheme()" id="themeBtn">
+    <span class="icon">🌙</span>
+    <span id="themeLabel">Dark</span>
+</button>
+
 <div class="card">
     <div class="header">
+        <div class="header-logo">RPM Logistics</div>
         <h1>Daily Payment Request</h1>
         <p>Jo jaante ho wahi bharo – baaki chhod do!</p>
     </div>
+
     <form id="paymentForm" class="form">
         <div class="float-group">
-            <input type="date" id="date" required placeholder=" " value="">
-            <label for="date">Date</label>
+            <label class="field-label">Date</label>
+            <input type="date" id="date" required>
         </div>
+
         <div class="float-group">
+            <label class="field-label">Ledger Name</label>
             <select id="ledger" required>
-                <option value="" selected disabled hidden></option>
-                <option value="Warai Charges">Warai Charges</option>
-                <option value="Vehicle Toll Charges">Vehicle Toll Charges</option>
-                <option value="Labour Charges">Labour Charges</option>
-                <option value="Vehicle Hire Charges">Vehicle Hire Charges</option>
-                <option value="Loading & Unloading Charges">Loading & Unloading Charges</option>
-                <option value="Lunch & Dinner Expenses">Lunch & Dinner Expenses</option>
-                <option value="Petrol & Diesel Expenses">Petrol & Diesel Expenses</option>
-                <option value="Vehicle Repair & Maintenance Charges">Vehicle Repair & Maintenance Charges</option>
-                <option value="RTO Charges">RTO Charges</option>
-                <option value="Road Tax, Permit & Vehicle Registration Charges">Road Tax, Permit & Vehicle Registration Charges</option>
-                <option value="Courier Charges">Courier Charges</option>
-                <option value="Electricity Charges">Electricity Charges</option>
-                <option value="Festivals Celebration Charges">Festivals Celebration Charges</option>
-                <option value="Godown Expenses">Godown Expenses</option>
-                <option value="Handling Charges">Handling Charges</option>
-                <option value="Housekeeping Charges">Housekeeping Charges</option>
-                <option value="Internet Charges">Internet Charges</option>
-                <option value="Medical Expenses">Medical Expenses</option>
-                <option value="Miscellaneous Expenses">Miscellaneous Expenses</option>
-                <option value="Mobile & Telephone Expenses">Mobile & Telephone Expenses</option>
-                <option value="Office Expenses">Office Expenses</option>
-                <option value="Printing & Stationery Charges">Printing & Stationery Charges</option>
-                <option value="Rent Charges (Room)">Rent Charges (Room)</option>
-                <option value="Rent Charges (W/H)">Rent Charges (W/H)</option>
-                <option value="Rent Charges (P&M)">Rent Charges (P&M)</option>
-                <option value="Machine Repair & Maintenance">Machine Repair & Maintenance</option>
-                <option value="Salary Expenses">Salary Expenses</option>
-                <option value="Security Service Charges">Security Service Charges</option>
-                <option value="Tea & Snack Expenses">Tea & Snack Expenses</option>
-                <option value="Travelling Expenses">Travelling Expenses</option>
-                <option value="Vehicle Insurance Charges">Vehicle Insurance Charges</option>
-                <option value="Water Charges">Water Charges</option>
-                <option value="Computer Repairs & Maintenance">Computer Repairs & Maintenance</option>
-                <option value="Electric Repairing Charges">Electric Repairing Charges</option>
-                <option value="Godown Maintenance Charges">Godown Maintenance Charges</option>
+                <option value="" selected disabled hidden>Select ledger…</option>
+                <option>Warai Charges</option>
+                <option>Vehicle Toll Charges</option>
+                <option>Labour Charges</option>
+                <option>Vehicle Hire Charges</option>
+                <option>Loading & Unloading Charges</option>
+                <option>Lunch & Dinner Expenses</option>
+                <option>Petrol & Diesel Expenses</option>
+                <option>Vehicle Repair & Maintenance Charges</option>
+                <option>RTO Charges</option>
+                <option>Road Tax, Permit & Vehicle Registration Charges</option>
+                <option>Courier Charges</option>
+                <option>Electricity Charges</option>
+                <option>Festivals Celebration Charges</option>
+                <option>Godown Expenses</option>
+                <option>Handling Charges</option>
+                <option>Housekeeping Charges</option>
+                <option>Internet Charges</option>
+                <option>Medical Expenses</option>
+                <option>Miscellaneous Expenses</option>
+                <option>Mobile & Telephone Expenses</option>
+                <option>Office Expenses</option>
+                <option>Printing & Stationery Charges</option>
+                <option>Rent Charges (Room)</option>
+                <option>Rent Charges (W/H)</option>
+                <option>Rent Charges (P&M)</option>
+                <option>Machine Repair & Maintenance</option>
+                <option>Salary Expenses</option>
+                <option>Security Service Charges</option>
+                <option>Tea & Snack Expenses</option>
+                <option>Travelling Expenses</option>
+                <option>Vehicle Insurance Charges</option>
+                <option>Water Charges</option>
+                <option>Computer Repairs & Maintenance</option>
+                <option>Electric Repairing Charges</option>
+                <option>Godown Maintenance Charges</option>
             </select>
-            <label for="ledger">Ledger Name</label>
         </div>
+
         <div class="float-group">
-            <input type="tel" inputmode="numeric" pattern="[0-9]*" id="amount" placeholder=" " required>
-            <label for="amount">Amount</label>
+            <label class="field-label">Amount (₹)</label>
+            <input type="tel" inputmode="numeric" pattern="[0-9]*" id="amount" placeholder="0" required>
         </div>
-        <!-- LR Branch - Multiple (kept as is) -->
+
+        <div class="divider"></div>
+
         <div class="float-group" id="lrBranchSection">
-            <label>LR Branch</label>
+            <label class="field-label">LR Branch</label>
             <div id="lrBranchEntries">
                 <div class="multi-entry">
-                    <input type="text" class="lr-branch-input" placeholder=" " maxlength="50">
+                    <input type="text" class="lr-branch-input" placeholder="Branch name…" maxlength="50">
                 </div>
             </div>
             <button type="button" class="add-more" onclick="addEntry('lrBranch')">+ Add More Branch</button>
         </div>
-        <!-- Vehicle No (single) -->
+
         <div class="float-group">
-            <input type="text" id="vehicleNo" placeholder=" " maxlength="12">
-            <label for="vehicleNo">Vehicle No</label>
+            <label class="field-label">Vehicle No</label>
+            <input type="text" id="vehicleNo" placeholder="MH01AB1234" maxlength="12">
         </div>
-        <!-- Single dropdown for reference type + conditional fields -->
+
         <div class="float-group">
+            <label class="field-label">Reference Type</label>
             <select id="referenceType" onchange="showReferenceField()">
-                <option value="">-- Select Reference Type --</option>
+                <option value="">— Select Reference Type —</option>
                 <option value="lrNo">LR No</option>
                 <option value="challanNo">Challan No</option>
                 <option value="drsNo">DRS No</option>
             </select>
-            <label for="referenceType">Reference Type</label>
         </div>
-        <!-- LR No section (hidden by default) -->
+
         <div class="float-group reference-section" id="lrNoSection">
-            <label>LR No</label>
+            <label class="field-label">LR No</label>
             <div id="lrNoEntries">
                 <div class="multi-entry">
-                    <input type="tel" inputmode="numeric" pattern="[0-9]*" class="lr-no-input" placeholder=" " maxlength="20">
+                    <input type="tel" inputmode="numeric" pattern="[0-9]*" class="lr-no-input" placeholder="LR number…" maxlength="20">
                 </div>
             </div>
             <button type="button" class="add-more" onclick="addEntry('lrNo')">+ Add More LR No</button>
         </div>
-        <!-- Challan No section (hidden by default) -->
+
         <div class="float-group reference-section" id="challanNoSection">
-            <label>Challan No</label>
+            <label class="field-label">Challan No</label>
             <div id="challanNoEntries">
                 <div class="multi-entry">
-                    <input type="tel" inputmode="numeric" pattern="[0-9]*" class="challan-no-input" placeholder=" " maxlength="20">
+                    <input type="tel" inputmode="numeric" pattern="[0-9]*" class="challan-no-input" placeholder="Challan number…" maxlength="20">
                 </div>
             </div>
             <button type="button" class="add-more" onclick="addEntry('challanNo')">+ Add More Challan</button>
         </div>
-        <!-- DRS No section (hidden by default) -->
+
         <div class="float-group reference-section" id="drsNoSection">
-            <label>DRS No</label>
+            <label class="field-label">DRS No</label>
             <div id="drsNoEntries">
                 <div class="multi-entry">
-                    <input type="tel" inputmode="numeric" pattern="[0-9]*" class="drs-no-input" placeholder=" " maxlength="20">
+                    <input type="tel" inputmode="numeric" pattern="[0-9]*" class="drs-no-input" placeholder="DRS number…" maxlength="20">
                 </div>
             </div>
             <button type="button" class="add-more" onclick="addEntry('drsNo')">+ Add More DRS</button>
         </div>
+
         <div class="float-group">
-            <textarea id="spRemarks" rows="3" placeholder=" "></textarea>
-            <label for="spRemarks">SP Remarks</label>
+            <label class="field-label">SP Remarks</label>
+            <textarea id="spRemarks" rows="3" placeholder="Optional remarks…"></textarea>
         </div>
+
         <button type="submit" class="btn">
             <svg class="whatsapp-icon" viewBox="0 0 24 24" fill="currentColor">
                 <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
@@ -359,118 +532,100 @@
         </button>
     </form>
 </div>
+
 <div id="success">
     <div class="success-box">
-        <svg class="check-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5">
+        <svg class="check-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
             <polyline points="20 6 9 17 4 12"></polyline>
         </svg>
-        <h2>Success!</h2>
-        <p>WhatsApp khul raha hai...</p>
+        <h2>Sent! 🎉</h2>
+        <p>WhatsApp khul raha hai…</p>
     </div>
 </div>
 
 <script>
-    const WHATSAPP_NUMBER = "919503269123";
+    const WHATSAPP_NUMBER = "919699032868";
 
-    // Today's date
     document.getElementById('date').value = new Date().toISOString().split('T')[0];
 
-    // Vehicle No uppercase + no space
     document.getElementById('vehicleNo').addEventListener('input', e => {
         e.target.value = e.target.value.toUpperCase().replace(/\s+/g, '');
     });
 
-    // LR Branch uppercase + only letters & space
     document.querySelectorAll('.lr-branch-input').forEach(el => {
         el.addEventListener('input', function() {
             this.value = this.value.toUpperCase().replace(/[^A-Z\s]/g, '');
         });
     });
 
-    // Numeric only for amount & reference numbers
     document.querySelectorAll('#amount, .lr-no-input, .challan-no-input, .drs-no-input').forEach(el => {
         el.addEventListener('input', function() {
             this.value = this.value.replace(/[^0-9]/g, '');
         });
     });
 
+    function toggleTheme() {
+        const html = document.documentElement;
+        const isDark = html.getAttribute('data-theme') === 'dark';
+        html.setAttribute('data-theme', isDark ? 'light' : 'dark');
+        document.querySelector('.theme-toggle .icon').textContent = isDark ? '☀️' : '🌙';
+        document.getElementById('themeLabel').textContent = isDark ? 'Light' : 'Dark';
+    }
+
     function addEntry(type) {
         const container = document.getElementById(type + 'Entries');
         const newEntry = document.createElement('div');
         newEntry.className = 'multi-entry';
-        let inputClass = '';
-        let maxLength = 20;
-        if (type === 'lrBranch') {
-            inputClass = 'lr-branch-input';
-            maxLength = 50;
-        } else if (type === 'lrNo') {
-            inputClass = 'lr-no-input';
-        } else if (type === 'challanNo') {
-            inputClass = 'challan-no-input';
-        } else if (type === 'drsNo') {
-            inputClass = 'drs-no-input';
-        }
+
+        const isText = type === 'lrBranch';
         const input = document.createElement('input');
-        input.type = (type === 'lrBranch') ? 'text' : 'tel';
-        input.className = inputClass;
+        input.type = isText ? 'text' : 'tel';
+        input.className = isText ? 'lr-branch-input' : type.replace(/([A-Z])/g, '-$1').toLowerCase().slice(1) + '-input';
         input.placeholder = ' ';
-        input.maxLength = maxLength;
-        if (type !== 'lrBranch') {
+        input.maxLength = isText ? 50 : 20;
+
+        if (!isText) {
             input.setAttribute('inputmode', 'numeric');
             input.setAttribute('pattern', '[0-9]*');
+            input.addEventListener('input', function() { this.value = this.value.replace(/[^0-9]/g, ''); });
+        } else {
+            input.addEventListener('input', function() {
+                this.value = this.value.toUpperCase().replace(/[^A-Z\s]/g, '');
+            });
         }
+
         const removeBtn = document.createElement('button');
         removeBtn.type = 'button';
         removeBtn.className = 'remove-btn';
         removeBtn.textContent = '×';
         removeBtn.onclick = () => newEntry.remove();
+
         newEntry.appendChild(input);
         newEntry.appendChild(removeBtn);
         container.appendChild(newEntry);
-
-        // Re-attach validation
-        if (type === 'lrBranch') {
-            input.addEventListener('input', function() {
-                this.value = this.value.toUpperCase().replace(/[^A-Z\s]/g, '');
-            });
-        } else {
-            input.addEventListener('input', function() {
-                this.value = this.value.replace(/[^0-9]/g, '');
-            });
-        }
     }
 
-    // Show/hide reference field based on dropdown
     function showReferenceField() {
-        const select = document.getElementById('referenceType');
-        const value = select.value;
-        document.querySelectorAll('.reference-section').forEach(sec => {
-            sec.classList.remove('active');
-        });
-        if (value) {
-            document.getElementById(value + 'Section').classList.add('active');
-        }
+        const value = document.getElementById('referenceType').value;
+        document.querySelectorAll('.reference-section').forEach(sec => sec.classList.remove('active'));
+        if (value) document.getElementById(value + 'Section').classList.add('active');
     }
 
-    // Form submit
     document.getElementById('paymentForm').addEventListener('submit', e => {
         e.preventDefault();
 
         const lrBranches = Array.from(document.querySelectorAll('.lr-branch-input'))
-            .map(el => el.value.trim()).filter(v => v);
+            .map(el => el.value.trim()).filter(Boolean);
 
         let lrNos = [], challanNos = [], drsNos = [];
         const refType = document.getElementById('referenceType').value;
 
         if (refType === 'lrNo') {
-            lrNos = Array.from(document.querySelectorAll('.lr-no-input'))
-                .map(el => el.value.trim()).filter(v => v);
+            lrNos = Array.from(document.querySelectorAll('.lr-no-input')).map(el => el.value.trim()).filter(Boolean);
         } else if (refType === 'challanNo') {
-            challanNos = Array.from(document.querySelectorAll('.challan-no-input'))
-                .map(el => el.value.trim()).filter(v => v);
+            challanNos = Array.from(document.querySelectorAll('.challan-no-input')).map(el => el.value.trim()).filter(Boolean);
         } else if (refType === 'drsNo') {
-            drsNos = Array.from(document.querySelectorAll('.drs-no-input'))
-                .map(el => el.value.trim()).filter(v => v);
+            drsNos = Array.from(document.querySelectorAll('.drs-no-input')).map(el => el.value.trim()).filter(Boolean);
         }
 
         const data = {
@@ -494,10 +649,7 @@
         let msg = `💰 *Daily Payment Request*\n\n`;
         if (data.date) msg += `📅 *Date:* ${formattedDate}\n`;
         if (data.ledger) msg += `📋 *Ledger Name:* ${data.ledger}\n`;
-        if (data.amount) {
-            const amtNum = Number(data.amount);
-            msg += `💰 *Amount:* ₹${amtNum.toLocaleString('en-IN')}\n`;  // No .00
-        }
+        if (data.amount) msg += `💰 *Amount:* ₹${Number(data.amount).toLocaleString('en-IN')}\n`;
         msg += `💳 *Tr. Type:* \n🔢 *UTR No:* \n`;
         if (data.lrBranch) msg += `🏢 *LR Branch:* ${data.lrBranch}\n`;
         if (data.lrNo) msg += `📄 *LR No:* ${data.lrNo}\n`;
