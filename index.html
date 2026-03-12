@@ -67,43 +67,45 @@
         .header {
             background: var(--header-bg);
             color: white;
-            padding: 2.4rem 2rem 2rem;
-            text-align: center;
+            padding: 0.9rem 1.4rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
             position: relative;
             overflow: hidden;
         }
 
-        .header::after {
-            content: '';
-            position: absolute;
-            bottom: -1px; left: 0; right: 0;
-            height: 20px;
-            background: var(--card-bg);
-            border-radius: 20px 20px 0 0;
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 0.65rem;
         }
 
-        .header-logo {
+        .header-badge {
+            background: rgba(255,255,255,0.2);
+            border: 1px solid rgba(255,255,255,0.28);
+            border-radius: 5px;
+            padding: 0.18rem 0.5rem;
             font-family: 'Syne', sans-serif;
-            font-size: 0.75rem;
-            font-weight: 600;
-            letter-spacing: 0.25em;
+            font-size: 0.65rem;
+            font-weight: 800;
+            letter-spacing: 0.12em;
             text-transform: uppercase;
-            opacity: 0.75;
-            margin-bottom: 0.8rem;
         }
 
         .header h1 {
             font-family: 'Syne', sans-serif;
-            font-size: 1.85rem;
-            font-weight: 800;
-            letter-spacing: -0.03em;
-            margin-bottom: 0.4rem;
+            font-size: 0.92rem;
+            font-weight: 700;
+            letter-spacing: 0.01em;
+            opacity: 0.95;
         }
 
-        .header p {
-            font-size: 0.88rem;
-            opacity: 0.82;
-            font-style: italic;
+        .header-date {
+            font-size: 0.7rem;
+            opacity: 0.65;
+            font-weight: 500;
+            letter-spacing: 0.02em;
         }
 
         .form {
@@ -350,9 +352,11 @@
 
 <div class="card">
     <div class="header">
-        <div class="header-logo">RPM Logistics</div>
-        <h1>Daily Payment Request</h1>
-        <p>Jo jaante ho wahi bharo – baaki chhod do!</p>
+        <div class="header-left">
+            <span class="header-badge">RPM</span>
+            <h1>Daily Payment Request</h1>
+        </div>
+        <span class="header-date" id="headerDate"></span>
     </div>
 
     <form id="paymentForm" class="form">
@@ -493,6 +497,7 @@
     const WHATSAPP_NUMBER = "919699032868";
 
     document.getElementById('date').value = new Date().toISOString().split('T')[0];
+    document.getElementById('headerDate').textContent = new Date().toLocaleDateString('en-IN', { day:'2-digit', month:'short', year:'numeric' });
 
     document.getElementById('vehicleNo').addEventListener('input', e => {
         e.target.value = e.target.value.toUpperCase().replace(/\s+/g, '');
