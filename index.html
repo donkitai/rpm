@@ -497,7 +497,15 @@
     const WHATSAPP_NUMBER = "919699032868";
 
     document.getElementById('date').value = new Date().toISOString().split('T')[0];
-    document.getElementById('headerDate').textContent = new Date().toLocaleDateString('en-IN', { day:'2-digit', month:'short', year:'numeric' });
+
+    function updateClock() {
+        const now = new Date();
+        const date = now.toLocaleDateString('en-IN', { day:'2-digit', month:'short', year:'numeric' });
+        const time = now.toLocaleTimeString('en-IN', { hour:'2-digit', minute:'2-digit', second:'2-digit', hour12:true }).toUpperCase();
+        document.getElementById('headerDate').textContent = date + '  •  ' + time;
+    }
+    updateClock();
+    setInterval(updateClock, 1000);
 
     document.getElementById('vehicleNo').addEventListener('input', e => {
         e.target.value = e.target.value.toUpperCase().replace(/\s+/g, '');
