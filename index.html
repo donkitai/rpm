@@ -493,128 +493,104 @@
 <script>
     const WHATSAPP_NUMBER = "919699032868";
 
-    document.getElementById('date').value = new Date().toISOString().split('T')[0];
+    // ── Local date (fixes UTC-1-day bug) ──────────────────
+    function localDateStr(d = new Date()) {
+        const dd = String(d.getDate()).padStart(2, '0');
+        const mm = String(d.getMonth() + 1).padStart(2, '0');
+        const yyyy = d.getFullYear();
+        return `${yyyy}-${mm}-${dd}`;          // yyyy-mm-dd for hidden input
+    }
+    function formatDateDMY(str) {
+        const [yyyy, mm, dd] = str.split('-');
+        return `${dd}-${mm}-${yyyy}`;          // dd-mm-yyyy for WhatsApp msg
+    }
 
+    document.getElementById('date').value = localDateStr();
+
+    // ── Live clock ────────────────────────────────────────
     function updateClock() {
         const now = new Date();
-        const date = now.toLocaleDateString('en-IN', { day:'2-digit', month:'short', year:'numeric' });
-        const time = now.toLocaleTimeString('en-IN', { hour:'2-digit', minute:'2-digit', second:'2-digit', hour12:true }).toUpperCase();
-        document.getElementById('headerDate').textContent = date + '  •  ' + time;
+        const date = now.toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' });
+        const time = now.toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true }).toUpperCase();
+        document.getElementById('headerDate').textContent = `${date}  •  ${time}`;
     }
     updateClock();
     setInterval(updateClock, 1000);
 
-    document.getElementById('vehicleNo').addEventListener('input', e => {
-        e.target.value = e.target.value.toUpperCase().replace(/\s+/g, '');
+    // ── Input validators ──────────────────────────────────
+    document.getElementById('vehicleNo').addEventListener('input', function() {
+        this.value = this.value.toUpperCase().replace(/\s+/g, '');
+    });
+    document.addEventListener('input', e => {
+        if (e.target.classList.contains('lr-branch-input'))
+            e.target.value = e.target.value.toUpperCase().replace(/[^A-Z\s]/g, '');
+        if (e.target.matches('#amount, .lr-no-input, .challan-no-input, .drs-no-input'))
+            e.target.value = e.target.value.replace(/[^0-9]/g, '');
     });
 
-    document.querySelectorAll('.lr-branch-input').forEach(el => {
-        el.addEventListener('input', function() {
-            this.value = this.value.toUpperCase().replace(/[^A-Z\s]/g, '');
-        });
-    });
-
-    document.querySelectorAll('#amount, .lr-no-input, .challan-no-input, .drs-no-input').forEach(el => {
-        el.addEventListener('input', function() {
-            this.value = this.value.replace(/[^0-9]/g, '');
-        });
-    });
-
+    // ── Add multi-entry row ───────────────────────────────
     function addEntry(type) {
-        const container = document.getElementById(type + 'Entries');
-        const newEntry = document.createElement('div');
-        newEntry.className = 'multi-entry';
-
         const isText = type === 'lrBranch';
-        const input = document.createElement('input');
-        input.type = isText ? 'text' : 'tel';
-        input.className = isText ? 'lr-branch-input' : type.replace(/([A-Z])/g, '-$1').toLowerCase().slice(1) + '-input';
-        input.placeholder = ' ';
-        input.maxLength = isText ? 50 : 20;
+        const input = Object.assign(document.createElement('input'), {
+            type: isText ? 'text' : 'tel',
+            className: isText ? 'lr-branch-input' : `${type.replace(/([A-Z])/g, '-$1').toLowerCase().slice(1)}-input`,
+            placeholder: ' ',
+            maxLength: isText ? 50 : 20
+        });
+        if (!isText) { input.inputMode = 'numeric'; input.pattern = '[0-9]*'; }
 
-        if (!isText) {
-            input.setAttribute('inputmode', 'numeric');
-            input.setAttribute('pattern', '[0-9]*');
-            input.addEventListener('input', function() { this.value = this.value.replace(/[^0-9]/g, ''); });
-        } else {
-            input.addEventListener('input', function() {
-                this.value = this.value.toUpperCase().replace(/[^A-Z\s]/g, '');
-            });
-        }
-
-        const removeBtn = document.createElement('button');
-        removeBtn.type = 'button';
-        removeBtn.className = 'remove-btn';
-        removeBtn.textContent = '×';
-        removeBtn.onclick = () => newEntry.remove();
-
-        newEntry.appendChild(input);
-        newEntry.appendChild(removeBtn);
-        container.appendChild(newEntry);
+        const removeBtn = Object.assign(document.createElement('button'), {
+            type: 'button', className: 'remove-btn', textContent: '×'
+        });
+        const entry = Object.assign(document.createElement('div'), { className: 'multi-entry' });
+        removeBtn.onclick = () => entry.remove();
+        entry.append(input, removeBtn);
+        document.getElementById(`${type}Entries`).appendChild(entry);
     }
 
+    // ── Reference type toggle ─────────────────────────────
     function showReferenceField() {
-        const value = document.getElementById('referenceType').value;
-        document.querySelectorAll('.reference-section').forEach(sec => sec.classList.remove('active'));
-        if (value) document.getElementById(value + 'Section').classList.add('active');
+        const val = document.getElementById('referenceType').value;
+        document.querySelectorAll('.reference-section').forEach(s => s.classList.remove('active'));
+        if (val) document.getElementById(`${val}Section`).classList.add('active');
     }
 
+    // ── Form submit → WhatsApp ────────────────────────────
     document.getElementById('paymentForm').addEventListener('submit', e => {
         e.preventDefault();
 
-        const lrBranches = Array.from(document.querySelectorAll('.lr-branch-input'))
-            .map(el => el.value.trim()).filter(Boolean);
-
-        let lrNos = [], challanNos = [], drsNos = [];
+        const vals = sel => Array.from(document.querySelectorAll(sel)).map(el => el.value.trim()).filter(Boolean);
         const refType = document.getElementById('referenceType').value;
 
-        if (refType === 'lrNo') {
-            lrNos = Array.from(document.querySelectorAll('.lr-no-input')).map(el => el.value.trim()).filter(Boolean);
-        } else if (refType === 'challanNo') {
-            challanNos = Array.from(document.querySelectorAll('.challan-no-input')).map(el => el.value.trim()).filter(Boolean);
-        } else if (refType === 'drsNo') {
-            drsNos = Array.from(document.querySelectorAll('.drs-no-input')).map(el => el.value.trim()).filter(Boolean);
-        }
-
         const data = {
-            date: document.getElementById('date').value,
-            ledger: document.getElementById('ledger').value,
-            amount: document.getElementById('amount').value,
-            lrBranch: lrBranches.join(', '),
-            lrNo: lrNos.join(', '),
+            date:      document.getElementById('date').value,
+            ledger:    document.getElementById('ledger').value,
+            amount:    document.getElementById('amount').value,
+            lrBranch:  vals('.lr-branch-input').join(', '),
             vehicleNo: document.getElementById('vehicleNo').value.trim(),
-            challanNo: challanNos.join(', '),
-            drsNo: drsNos.join(', '),
-            spRemarks: document.getElementById('spRemarks').value.trim()
+            lrNo:      refType === 'lrNo'      ? vals('.lr-no-input').join(', ')      : '',
+            challanNo: refType === 'challanNo' ? vals('.challan-no-input').join(', ') : '',
+            drsNo:     refType === 'drsNo'     ? vals('.drs-no-input').join(', ')     : '',
+            remarks:   document.getElementById('spRemarks').value.trim()
         };
 
-        let formattedDate = '';
-        if (data.date) {
-            const [yyyy, mm, dd] = data.date.split('-');
-            formattedDate = `${dd}-${mm}-${yyyy}`;
-        }
-
         let msg = `💰 *Daily Payment Request*\n\n`;
-        if (data.date) msg += `📅 *Date:* ${formattedDate}\n`;
-        if (data.ledger) msg += `📋 *Ledger Name:* ${data.ledger}\n`;
-        if (data.amount) msg += `💰 *Amount:* ${Number(data.amount).toLocaleString('en-IN')}\n`;
+        msg += `📅 *Date:* ${formatDateDMY(data.date)}\n`;
+        if (data.ledger)    msg += `📋 *Ledger Name:* ${data.ledger}\n`;
+        if (data.amount)    msg += `💰 *Amount:* ${Number(data.amount).toLocaleString('en-IN')}\n`;
         msg += `💳 *Tr. Type:* \n🔢 *UTR No:* \n`;
-        if (data.lrBranch) msg += `🏢 *LR Branch:* ${data.lrBranch}\n`;
-        if (data.lrNo) msg += `📄 *LR No:* ${data.lrNo}\n`;
+        if (data.lrBranch)  msg += `🏢 *LR Branch:* ${data.lrBranch}\n`;
+        if (data.lrNo)      msg += `📄 *LR No:* ${data.lrNo}\n`;
         if (data.vehicleNo) msg += `🚗 *Vehicle No:* ${data.vehicleNo}\n`;
         if (data.challanNo) msg += `📋 *Challan No:* ${data.challanNo}\n`;
-        if (data.drsNo) msg += `📑 *DRS No:* ${data.drsNo}\n`;
-        if (data.spRemarks) msg += `\n📝 *SP Remarks:* ${data.spRemarks}\n`;
+        if (data.drsNo)     msg += `📑 *DRS No:* ${data.drsNo}\n`;
+        if (data.remarks)   msg += `\n📝 *SP Remarks:* ${data.remarks}\n`;
 
-        const url = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(msg)}`;
-
-        document.getElementById('success').classList.add('show');
+        const successEl = document.getElementById('success');
+        successEl.classList.add('show');
         setTimeout(() => {
-            window.open(url, '_blank');
-            setTimeout(() => {
-                document.getElementById('success').classList.remove('show');
-                location.reload();
-            }, 1000);
+            window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(msg)}`, '_blank');
+            setTimeout(() => { successEl.classList.remove('show'); location.reload(); }, 1000);
         }, 1600);
     });
 </script>
