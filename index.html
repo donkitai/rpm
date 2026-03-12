@@ -533,7 +533,7 @@
         const isText = type === 'lrBranch';
         const input = Object.assign(document.createElement('input'), {
             type: isText ? 'text' : 'tel',
-            className: isText ? 'lr-branch-input' : `${type.replace(/([A-Z])/g, '-$1').toLowerCase().slice(1)}-input`,
+            className: isText ? 'lr-branch-input' : `${type.replace(/([A-Z])/g, '-$1').toLowerCase().replace(/^-/, '')}-input`,
             placeholder: ' ',
             maxLength: isText ? 50 : 20
         });
