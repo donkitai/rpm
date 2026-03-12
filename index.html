@@ -187,6 +187,38 @@
             padding-right: 2.6rem;
         }
 
+        .multi-entry input.duplicate-error {
+            border-color: #ef4444 !important;
+            box-shadow: 0 0 0 3px rgba(239,68,68,0.18) !important;
+            background: #fff5f5 !important;
+            animation: shake 0.35s ease;
+        }
+
+        .duplicate-msg {
+            font-size: 0.72rem;
+            color: #ef4444;
+            font-weight: 600;
+            margin-top: 0.25rem;
+            margin-left: 0.2rem;
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+            animation: fadeIn 0.2s ease;
+        }
+
+        @keyframes shake {
+            0%,100% { transform: translateX(0); }
+            20%      { transform: translateX(-6px); }
+            40%      { transform: translateX(6px); }
+            60%      { transform: translateX(-4px); }
+            80%      { transform: translateX(4px); }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-4px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
         .remove-btn {
             position: absolute;
             right: 0.75rem;
@@ -528,6 +560,59 @@
             e.target.value = e.target.value.replace(/[^0-9]/g, '');
     });
 
+    // ── Duplicate check on blur ───────────────────────────
+    function checkDuplicateInContainer(input, containerId) {
+        const container = document.getElementById(containerId);
+        if (!container) return;
+        const val = input.value.trim().toLowerCase();
+        if (!val) { clearDupError(input); return; }
+
+        const allInputs = Array.from(container.querySelectorAll('input'));
+        const isDup = allInputs.some(el => el !== input && el.value.trim().toLowerCase() === val);
+
+        if (isDup) {
+            input.classList.add('duplicate-error');
+            let errEl = input.parentElement.querySelector('.duplicate-msg');
+            if (!errEl) {
+                errEl = document.createElement('div');
+                errEl.className = 'duplicate-msg';
+                errEl.innerHTML = `⚠️ Duplicate value`;
+                input.parentElement.appendChild(errEl);
+            }
+        } else {
+            clearDupError(input);
+        }
+    }
+
+    function clearDupError(input) {
+        input.classList.remove('duplicate-error');
+        const errEl = input.parentElement?.querySelector('.duplicate-msg');
+        if (errEl) errEl.remove();
+    }
+
+    // Map container IDs to watch
+    const dupContainers = {
+        lrBranchEntries:  'lrBranchEntries',
+        lrNoEntries:      'lrNoEntries',
+        challanNoEntries: 'challanNoEntries',
+        drsNoEntries:     'drsNoEntries'
+    };
+
+    document.addEventListener('blur', e => {
+        const input = e.target;
+        for (const id of Object.values(dupContainers)) {
+            const container = document.getElementById(id);
+            if (container && container.contains(input)) {
+                checkDuplicateInContainer(input, id);
+                // Re-check all siblings after one is changed
+                container.querySelectorAll('input').forEach(el => {
+                    if (el !== input) checkDuplicateInContainer(el, id);
+                });
+                break;
+            }
+        }
+    }, true);
+
     // ── Add multi-entry row ───────────────────────────────
     function addEntry(type) {
         const isText = type === 'lrBranch';
@@ -558,6 +643,12 @@
     // ── Form submit → WhatsApp ────────────────────────────
     document.getElementById('paymentForm').addEventListener('submit', e => {
         e.preventDefault();
+
+        // Block if any duplicate errors exist
+        if (document.querySelector('.duplicate-error')) {
+            document.querySelector('.duplicate-error').focus();
+            return;
+        }
 
         const getVals = id => Array.from(document.querySelectorAll(`#${id} input`)).map(el => el.value.trim()).filter(Boolean);
         const refType = document.getElementById('referenceType').value;
